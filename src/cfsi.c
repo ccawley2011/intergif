@@ -81,4 +81,55 @@ BOOL ChangeFSI( const char *in, const char *out, const char *options )
 #endif
 }
 
+
+#ifdef __acorn
+BOOL MultiChangeFSI( const char *infile, const char *outfile, BOOL bJoin,
+                     const char *options )
+{
+    char inbuf[256];
+    char outbuf[256];
+    int n = 0;
+
+    if ( Anim_FileSize(infile) <= 0 )
+    {
+        Anim_SetError( "File %s not found", infile );
+        return FALSE;
+    }
+
+    for (;;)
+    {
+        Anim_NthName( infile, inbuf, n );
+        Anim_NthName( outfile, outbuf, n );
+        n++;
+
+        if ( Anim_FileSize(inbuf) <= 0 )
+            break;
+
+        if ( !ChangeFSI( inbuf, outbuf, options ) )
+            return FALSE;
+
+        if ( !bJoin )
+            break;
+    }
+    return TRUE;
+}
+
+void MultiChangeFSI_RemoveScrapFiles( const char *infile )
+{
+    char inbuf[256];
+    int n = 0;
+
+    for (;;)
+    {
+        Anim_NthName( infile, inbuf, n );
+        n++;
+
+        if ( Anim_FileSize(inbuf) <= 0 )
+            break;
+
+        remove(inbuf);
+    }
+}
+#endif
+
 /* eof */

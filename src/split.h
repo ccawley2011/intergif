@@ -8,10 +8,3 @@
  */
 
 void NthName( const char *in, char *out, int n );
-
-
-#ifdef __acorn
-BOOL MultiChangeFSI( const char *infile, const char *outfile, BOOL bJoin,
-                     const char *options );
-void MultiChangeFSI_RemoveScrapFiles( const char *infile );
-#endif
