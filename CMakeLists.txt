@@ -38,6 +38,7 @@ add_library(anim STATIC
 	src/workspace.c
 	src/workspace.h
 )
+target_include_directories(anim INTERFACE src)
 
 add_executable(intergif src/main.c)
 target_link_libraries(intergif PRIVATE anim)
@@ -50,3 +51,6 @@ if(WIN32)
 	)
 	target_link_libraries(igviewer PRIVATE anim)
 endif(WIN32)
+
+add_executable(igexample examples/igexample.c)
+target_link_libraries(igexample PRIVATE anim)
