@@ -159,7 +159,6 @@ o.histogram:	h.utils
 o.intergif:	c.intergif
 o.intergif:	h.animlib
 o.intergif:	h.utils
-o.intergif:	h.split
 o.intergif:	h.cfsi
 o.intergif:	h.intergif
 o.join:	c.join
@@ -204,7 +203,6 @@ o.main:	h.memflex
 o.main:	h.version
 o.main:	h.animlib
 o.main:	h.count
-o.main:	h.split
 o.main:	h.intergif
 o.mediancut:	c.mediancut
 o.mediancut:	h.animlib

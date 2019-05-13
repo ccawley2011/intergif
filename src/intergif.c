@@ -50,7 +50,6 @@
 
 #include "animlib.h"
 #include "utils.h"
-#include "split.h"
 #include "cfsi.h"
 
 #include "intergif.h"

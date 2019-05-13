@@ -82,7 +82,6 @@
 #include "version.h"
 #include "animlib.h"
 #include "count.h"
-#include "split.h"
 #include "intergif.h"
 
 #if 0

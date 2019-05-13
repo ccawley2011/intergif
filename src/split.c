@@ -111,7 +111,7 @@ void test( char *s )
 
     for ( i=0; i < 5; i++ )
     {
-        NthName( s, buffer, i );
+        Anim_NthName( s, buffer, i );
         printf( "%d @ %s = %s\n", i, s, buffer );
     }
 }

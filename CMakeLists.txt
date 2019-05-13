@@ -30,7 +30,6 @@ add_library(anim STATIC
 	src/savegif.c
 	src/savesprite.c
 	src/split.c
-	src/split.h
 	src/sprite.h
 	src/tca.h
 	src/utils.h
