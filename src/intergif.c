@@ -93,7 +93,7 @@ static BOOL Histogrammer( void *handle, const anim_imageinfo *pixels,
 
                 for ( x=0; x<w; x++ )
                 {
-                    unsigned int pix = *pShorts++;
+                    int pix = *pShorts++;
 
                     if ( maskptr ? (*maskptr & maskwant)
                     	       : ( pix != pixmask ) )
@@ -117,9 +117,9 @@ static BOOL Histogrammer( void *handle, const anim_imageinfo *pixels,
 
                 for ( x=0; x<w; x++ )
                 {
-                    unsigned int pix = (*pWords++)<<8;
+                    int pix = (*pWords++)<<8;
 
-	            if ( maskptr ? (*maskptr & maskwant)
+                    if ( maskptr ? (*maskptr & maskwant)
                                : ( pix != pixmask ) )
                         if ( !Histogram_Pixel( pix ) )
                             return FALSE;
@@ -154,7 +154,7 @@ static BOOL Histogrammer( void *handle, const anim_imageinfo *pixels,
 
             for ( x=0; x<w; x++ )
             {
-                unsigned int pix = (*imgptr >> imageshift) & imagewant;
+                int pix = (*imgptr >> imageshift) & imagewant;
 
                 if ( maskptr ? (*maskptr & maskwant)
                              : (pix != pixmask) )
@@ -261,7 +261,7 @@ static BOOL ChoosePaletteMapper( const char *infile, BOOL bList, BOOL bJoin,
 
                 pmap = PaletteMapper_ToData( h2->nEntries, cols );
 
-                debugf( "pmtodata returns %p\n", pmap );
+                debugf( "pmtodata returns %p\n", (void *)pmap );
             }
             else
                 debugf( "Couldn't create h2 in choosepm\n" );

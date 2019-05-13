@@ -36,10 +36,10 @@ typedef union {
  *----------------------------*/
 
 typedef struct {
-    int film_length;
+    unsigned int film_length;
     char name[12];
-	size_t start;
-    int width,
+    unsigned int start,
+        width,
         height,
         mode;
     tca_compresstype compression;

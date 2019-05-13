@@ -11,7 +11,7 @@
 #include <malloc.h>
 #include <string.h>
 
-#include "../src/animlib.h"
+#include "animlib.h"
 #include "resource.h"
 
 HINSTANCE hInst; /* Instance handle (like a task handle) */
@@ -57,7 +57,7 @@ typedef struct view_ {
     char         *wintitle;
     BITMAPINFO   *pDib;
     void         *pDibBits;
-    int          nFrame;
+    unsigned int nFrame;
     HPALETTE     hPal;
     playtools    pt;
 } viewstr;
@@ -156,7 +156,7 @@ void View_PlotFrame( view v, int f )
                             a->nWidth, a->nHeight, v->pDibBits );
 }
 
-void View_Goto( view v, int frame )
+void View_Goto( view v, unsigned int frame )
 {
     if ( v->nFrame != frame && v->a )
     {
@@ -237,10 +237,10 @@ BOOL View_New( const char *fname, int nCmdShow )
     if ( v->a->nFrames > 1 )
         y += tools_Y;
 
-	SetWindowPos( v->hwnd, NULL, 0,0,x,y, SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOZORDER );
+    SetWindowPos( v->hwnd, NULL, 0,0,x,y, SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOZORDER );
 
-	ShowWindow(v->hwnd, nCmdShow);
-	UpdateWindow(v->hwnd);
+    ShowWindow(v->hwnd, nCmdShow);
+    UpdateWindow(v->hwnd);
 
     return TRUE;
 }
@@ -560,7 +560,7 @@ BOOL ViewerInit(HINSTANCE hInstance, int nCmdShow, const char *fname)
     if ( !View_New( fname, nCmdShow ) )
         return FALSE;
 
-	return TRUE;
+    return TRUE;
 }
 
 /* Entry point */

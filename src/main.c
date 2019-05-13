@@ -92,7 +92,9 @@
 #define DEBUG 0
 #endif
 
+#ifdef __acorn
 static const char ERROR_VAR[] = "InterGif$Error";
+#endif
 
 static char *infile = NULL;
 static char *outfile = NULL;
@@ -214,9 +216,10 @@ static void DecodeArgs( int argc, char *argv[] )
     debugf( "\n\n" );
 #endif
 
-    *((int*)&flags) = 0;
-
     flags.nDefaultDelay = 8;
+    flags.bInterlace = FALSE;
+    flags.bLoop = FALSE;
+    flags.bForceDelay = FALSE;
 
     for ( i = 1; i < argc; i++ )
     {

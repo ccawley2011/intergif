@@ -129,7 +129,7 @@ BOOL Anim_AddFrame( anim a, unsigned int xs, unsigned int ys,
 
     if ( !f.pal || !f.pImageData )
     {
-        debugf( "aaf: pal=%p, imagedata=%p, failing\n", f.pal, f.pImageData );
+        debugf( "aaf: pal=%p, imagedata=%p, failing\n", (void *)f.pal, f.pImageData );
         Anim__FreeFrame( &f );
         return FALSE;
     }
@@ -467,7 +467,7 @@ palette Palette_Create( const unsigned int *pColours, unsigned int nColours )
         {
             ptr->nUsage++;
 
-            debugf( "pal%p: usage becomes %d\n", ptr, ptr->nUsage );
+            debugf( "pal%p: usage becomes %d\n", (void *)ptr, ptr->nUsage );
 
             return ptr;
         }
@@ -485,7 +485,7 @@ palette Palette_Create( const unsigned int *pColours, unsigned int nColours )
         ptr->pNext = palettepool;
         palettepool = ptr;
 
-        debugf( "pal%p: new, %d colours\n", ptr, nColours );
+        debugf( "pal%p: new, %d colours\n", (void *)ptr, nColours );
     }
     else
         Anim_NoMemory( "palcreate" );
@@ -508,7 +508,7 @@ void Palette_Destroy( palette *p )
 
         (*p)->nUsage--;
 
-        debugf( "pal%p: usage becomes %d\n", *p, (*p)->nUsage );
+        debugf( "pal%p: usage becomes %d\n", (void *)*p, (*p)->nUsage );
 
         if ( (*p)->nUsage == 0 )
         {

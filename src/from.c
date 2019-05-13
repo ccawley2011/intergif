@@ -414,7 +414,7 @@ static BOOL Animframe( void *handle, const anim_imageinfo *pixels,
     BOOL bMask = ( pixmask != -1 || bitmask );
     unsigned int mappedpal[256];
     const unsigned int *pPalette = pColours;
-    int ncol = 1<<bpp;
+    unsigned int ncol = 1<<bpp;
     BOOL result = TRUE;
 
     xs = pixels->nWidth;
@@ -474,7 +474,7 @@ static BOOL Animframe( void *handle, const anim_imageinfo *pixels,
              */
             if ( bpp <= 8 )
             {
-                int i;
+                unsigned int i;
 
                 /* Use 'mappedpal' as temp buffer here */
                 for ( i=0; i<ncol; i++ )
@@ -493,7 +493,7 @@ static BOOL Animframe( void *handle, const anim_imageinfo *pixels,
                 ncol = PaletteMapper_GetPalette( pArgs->pmap, mappedpal );
             else
             {
-                int i;
+                unsigned int i;
 
                 for ( i=0; i<ncol; i++ )
                     mappedpal[i] = PaletteMapper_Map( pArgs->pmap,
@@ -529,7 +529,7 @@ static BOOL Animframe( void *handle, const anim_imageinfo *pixels,
 anim Anim_FromData( const void *data, unsigned int size,
                     palettemapper pmap, BOOL bSame, BOOL bDiffuse, BOOL bZigZag, BOOL bGrey )
 {
-    animmaker_args aa = { NULL, NULL, FALSE };
+    animmaker_args aa = { NULL, NULL, FALSE, FALSE, FALSE, FALSE };
     BOOL result;
 
     aa.pmap = pmap;
@@ -547,7 +547,7 @@ anim Anim_FromData( const void *data, unsigned int size,
 
 anim Anim_FromFile( const char *filename, palettemapper pmap, BOOL bSame, BOOL bDiffuse, BOOL bZigZag, BOOL bGrey )
 {
-    animmaker_args aa = { NULL, NULL, FALSE };
+    animmaker_args aa = { NULL, NULL, FALSE, FALSE, FALSE, FALSE };
     BOOL result;
 
     aa.pmap = pmap;
@@ -565,7 +565,7 @@ anim Anim_FromFile( const char *filename, palettemapper pmap, BOOL bSame, BOOL b
 
 anim Anim_FromFiles( const char *firstname, palettemapper pmap, BOOL bSame, BOOL bDiffuse, BOOL bZigZag, BOOL bGrey )
 {
-    animmaker_args aa = { NULL, NULL, FALSE };
+    animmaker_args aa = { NULL, NULL, FALSE, FALSE, FALSE, FALSE };
     BOOL result;
 
     aa.pmap = pmap;
@@ -583,7 +583,7 @@ anim Anim_FromFiles( const char *firstname, palettemapper pmap, BOOL bSame, BOOL
 
 anim Anim_FromList( const char *listname, palettemapper pmap, BOOL bSame, BOOL bDiffuse, BOOL bZigZag, BOOL bGrey )
 {
-    animmaker_args aa = { NULL, NULL, FALSE };
+    animmaker_args aa = { NULL, NULL, FALSE, FALSE, FALSE, FALSE };
     BOOL result;
 
     aa.pmap = pmap;

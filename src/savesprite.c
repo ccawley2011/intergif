@@ -192,7 +192,6 @@ BOOL Anim_SaveSprite( const anim a, FILE *output, int nFrom, int nTo, BOOL bNewF
         palette p = f->pal;
         const unsigned int *pSrcPal = p->pColours;
         unsigned int *pDestPal = (unsigned int*)(psh+1);
-        int delay;
         unsigned int nColours = p->nColours;
         int bpp = 8;
         unsigned int nPalSize;
@@ -267,9 +266,8 @@ BOOL Anim_SaveSprite( const anim a, FILE *output, int nFrom, int nTo, BOOL bNewF
         }
 
         memset( psh->name, 0, 12 );
-        delay = f->csDelay;
-        if ( delay > 0 )
-            sprintf( psh->name, "%03ddelay%d", i, delay );
+        if ( f->csDelay > 0 )
+            sprintf( psh->name, "%03ddelay%.1d", i, (char)f->csDelay );
         else
             sprintf( psh->name, "%03d", i );
 

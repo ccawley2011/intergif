@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(intergif)
 
+if(MSVC)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE)
+elseif(WATCOM)
+	add_compile_options(-oanxh -wx)
+else()
+	add_compile_options(-O6 --unsigned-char -Wall -Wextra -pedantic -Wno-unused)
+endif()
+
 add_library(anim STATIC
 	src/animlib.c
 	src/animlib.h
