@@ -138,14 +138,13 @@ static void Usage( void )
                stdout );
 #endif
         fputs(
+"Usage: intergif [-i] [-o out] [-t [pixel]] [-d cs] [-loop] [-split] [-join]\n"
 #ifdef __acorn
-"Usage: intergif [-i] [-o out] [-t [pixel]] [-d cs] [-loop] [-split] [-join]\n"
 "           [-c args] [palette-options] infile\n"
-"       intergif -s [-o out] [-split] [-join] [-c args] [palette-options] infile\n"
 #else
-"Usage: intergif [-i] [-o out] [-t [pixel]] [-d cs] [-loop] [-split] [-join]\n"
 "           [palette-options] infile\n"
 #endif
+"       intergif -s [-o out] [-split] [-join] [-c args] [palette-options] infile\n"
 "        -i Make interlaced gif\n"
 "        -o Name output file (default is <infile>/gif)\n"
 "        -t Make gif with transparency\n"
@@ -159,10 +158,12 @@ static void Usage( void )
 "        -list Interpret infile as a list of input files\n"
 #ifdef __acorn
 "        -c Preprocess with ChangeFSI, eg -c \"28 2:1 2:1\"\n"
+#endif
 "        -s Make sprite output instead of gif\n"
 "        -new Output a new format sprite\n"
 "        -xdpi 180 | 90 | 45 | 22 Horizontal dpi specification for new format sprite\n"
 "        -ydpi 180 | 90 | 45 | 22 Vertical dpi specification for new format sprite\n"
+#ifdef __acorn
 "        infile  A RiscOS sprite file, Draw file, Complete Animator file, or gif\n"
 #else
 "        infile  A Complete Animator file, RiscOS sprite, or gif\n"
@@ -171,16 +172,14 @@ static void Usage( void )
 "        [-same] [-216 | -256 | -g16 | -g256 | -pal palfile | -best n]\n"
 "           -same Preserve unused colours in input palette\n"
 "           -216 Map to 216-colour cube as used by Netscape\n"
-#ifdef __acorn
 "           -256 Map to standard 256-colour Acorn palette\n"
 "           -pal Map to supplied palette\n"
-#endif
 "           -g16 Map to 16 colour greyscale palette\n"
 "           -g256 Map to 256-colour greyscale palette\n"
 "           -best Find optimal n colours and map to them\n"
+"        One of -216, -256, -g16, -g256, -pal or -best must be used with deep sprites\n"
 #ifdef __acorn
-"        One of -216, -256, -g16, -g256, -pal or -best must be used with Draw files\n"
-"        or deep sprites\n"
+"        or Draw files\n"
 #endif
 #ifndef BETA
 "See http://utter.chaos.org.uk/~pdh/software/intergif.htm for details\n"
@@ -294,7 +293,6 @@ static void DecodeArgs( int argc, char *argv[] )
         {
             g16 = TRUE;
         }
-#ifdef __acorn
         else if ( !my_stricmp( argv[i], "-pal" ) )
         {
             if ( i == argc-1 )
@@ -302,6 +300,7 @@ static void DecodeArgs( int argc, char *argv[] )
             palfile = argv[i+1];
             i++;
         }
+#ifdef __acorn
         else if ( !my_stricmp( argv[i], "-c" ) )
         {
             if ( i == argc-1 )
