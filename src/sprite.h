@@ -13,6 +13,21 @@
 #ifndef animlib_sprite_h
 #define animlib_sprite_h
 
+typedef struct
+{
+	BOOL isType  : 1;
+	unsigned int horz_dpi : 13;
+	unsigned int vert_dpi : 13;
+	unsigned int type     : 4;
+	BOOL isWide  : 1;
+} modesprite;
+
+typedef union
+{
+	unsigned int screen_mode;
+	modesprite sprite_mode;
+} modeval;
+
 typedef struct {
     unsigned int nSize;
     unsigned int nSprites;
@@ -32,7 +47,7 @@ typedef struct
   unsigned int  rightbit;
   int  imageoffset;
   int  maskoffset;
-  int  screenmode;
+  modeval screenmode;
 } spritestr;
 
 typedef spritestr *sprite;

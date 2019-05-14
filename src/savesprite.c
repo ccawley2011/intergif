@@ -236,32 +236,32 @@ BOOL Anim_SaveSprite( const anim a, FILE *output, int nFrom, int nTo, BOOL bNewF
 
         if ( bNewFormat )
         {
-          int mode_specifier = 0;
+          psh->screenmode.sprite_mode.isType = TRUE;
+          psh->screenmode.sprite_mode.isWide = FALSE;
           switch ( bpp )
           {
-            case 1: mode_specifier = (1<<27); break;
-            case 2: mode_specifier = (2<<27); break;
-            case 4: mode_specifier = (3<<27); break;
-            case 8: mode_specifier = (4<<27); break;
+            case 1: psh->screenmode.sprite_mode.type = 1; break;
+            case 2: psh->screenmode.sprite_mode.type = 2; break;
+            case 4: psh->screenmode.sprite_mode.type = 3; break;
+            case 8: psh->screenmode.sprite_mode.type = 4; break;
           }
           if (xdpi == 180 || xdpi == 90 || xdpi == 45 || xdpi == 22)
-              mode_specifier |= (xdpi << 1);
+              psh->screenmode.sprite_mode.horz_dpi = xdpi;
           else
-              mode_specifier |= (90 << 1);
+              psh->screenmode.sprite_mode.horz_dpi = 90;
           if (ydpi == 180 || ydpi == 90 || ydpi == 45 || ydpi == 22)
-              mode_specifier |= (ydpi << 14);
+              psh->screenmode.sprite_mode.vert_dpi = ydpi;
           else
-              mode_specifier |= (90 << 14);
-          psh->screenmode = mode_specifier | 1;
+              psh->screenmode.sprite_mode.vert_dpi = 90;
         }
         else
         {
           switch ( bpp )
           {
-          case 1: psh->screenmode = 18; break;
-          case 2: psh->screenmode = 19; break;
-          case 4: psh->screenmode = 20; break;
-          case 8: psh->screenmode = 21; break;
+          case 1: psh->screenmode.screen_mode = 18; break;
+          case 2: psh->screenmode.screen_mode = 19; break;
+          case 4: psh->screenmode.screen_mode = 20; break;
+          case 8: psh->screenmode.screen_mode = 21; break;
           }
         }
 

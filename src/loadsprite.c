@@ -74,7 +74,7 @@ void Sprite_RemoveLeftHandWastage( spritearea pArea, sprite spr );
 static void Sprite__GetPalette( const sprite spr, int ncol,
                                 unsigned int *pPalette );
 static int Sprite__GetDelay( const sprite spr );
-static int Sprite__ModeLog2BPP( int mode );
+static int Sprite__ModeLog2BPP( modeval mode );
 
 
     /*=====================*
@@ -133,7 +133,7 @@ BOOL Anim_ConvertSprite( const void *data, size_t nSize,
         if ( spr->maskoffset != spr->imageoffset
              && spr->maskoffset != 0 )
         {
-            BOOL newformat = ( spr->screenmode & 0xF8000000 ) != 0;
+            BOOL newformat = spr->screenmode.sprite_mode.type != 0;
 
             bMask = TRUE;
             mask.nWidth = xs;
@@ -326,14 +326,12 @@ static const char spritebpp[] = {
     3	/* MODE 49 8bpp */
 };
 
-static int Sprite__ModeLog2BPP( int mode )
+static int Sprite__ModeLog2BPP( modeval mode )
 {
-    int type = (mode>>27) & 63;
+    if ( mode.sprite_mode.type == 0 )
+        return mode.screen_mode < 50 ? (int)(spritebpp[mode.screen_mode]) : 4;
 
-    if ( type == 0 )
-        return mode < 50 ? (int)(spritebpp[mode]) : 4;
-
-    return type-1;
+    return mode.sprite_mode.type-1;
 }
 
 #ifndef RISCOS
@@ -372,7 +370,7 @@ void Sprite_RemoveLeftHandWastage( spritearea a, sprite s )
     unsigned int shift = s->leftbit;
 
     /* If nothing to do, or new style sprite, return */
-    if ( shift == 0 || (s->screenmode & 0xF8000000) )
+    if ( shift == 0 || s->screenmode.sprite_mode.type != 0 )
         return;
 
     height = s->height+1;
