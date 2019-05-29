@@ -184,37 +184,7 @@ static void Sprite__GetPalette( const sprite spr, int ncol,
     if ( spr->imageoffset < (44+ncol*8) )
     {
         /* This sprite don't got no palette */
-
-        if ( ncol == 256 )
-        {
-            int i;
-
-            /* Construct 8bit VIDC1 palette */
-            for ( i=0; i<256; i++ )
-            {
-                /* See 3PRM p1-539 (red and blue were the wrong way round in
-                 * InterGif 6.07)
-                 */
-                pPalette[i] = ((i&  3) * 0x11111100U)      /* tint b1 b0 */
-                            + ((i&  4) ? 0x00004400U : 0)  /* red b2 */
-                            + ((i&  8) ? 0x44000000U : 0)  /* blue b2 */
-                            + ((i& 16) ? 0x00008800U : 0)  /* red b3 */
-                            + ((i& 32) ? 0x00440000U : 0)  /* green b2 */
-                            + ((i& 64) ? 0x00880000U : 0)  /* green b3 */
-                            + ((i&128) ? 0x88000000U : 0); /* blue b3 */
-            }
-        }
-        else
-        {
-            switch ( ncol )
-            {
-            case 2:  pal = mode0palette; break;
-            case 4:  pal = mode1palette; break;
-            case 16: pal = mode12palette; break;
-            default: return;
-            }
-            memcpy( pPalette, pal, ncol * 4 );
-        }
+        Sprite_CreateDefaultPalette(ncol, pPalette);
     }
     else
     {
@@ -224,6 +194,42 @@ static void Sprite__GetPalette( const sprite spr, int ncol,
 
         for ( i=0; i<ncol; i++ )
             pPalette[i] = pal[i*2];
+    }
+}
+
+void Sprite_CreateDefaultPalette(int ncol, unsigned int *pPalette )
+{
+    const unsigned int *pal;
+
+    if ( ncol == 256 )
+    {
+        int i;
+
+        /* Construct 8bit VIDC1 palette */
+        for ( i=0; i<256; i++ )
+        {
+            /* See 3PRM p1-539 (red and blue were the wrong way round in
+             * InterGif 6.07)
+             */
+            pPalette[i] = ((i&  3) * 0x11111100U)      /* tint b1 b0 */
+                        + ((i&  4) ? 0x00004400U : 0)  /* red b2 */
+                        + ((i&  8) ? 0x44000000U : 0)  /* blue b2 */
+                        + ((i& 16) ? 0x00008800U : 0)  /* red b3 */
+                        + ((i& 32) ? 0x00440000U : 0)  /* green b2 */
+                        + ((i& 64) ? 0x00880000U : 0)  /* green b3 */
+                        + ((i&128) ? 0x88000000U : 0); /* blue b3 */
+        }
+    }
+    else
+    {
+        switch ( ncol )
+        {
+        case 2:  pal = mode0palette; break;
+        case 4:  pal = mode1palette; break;
+        case 16: pal = mode12palette; break;
+        default: return;
+        }
+        memcpy( pPalette, pal, ncol * 4 );
     }
 }
 

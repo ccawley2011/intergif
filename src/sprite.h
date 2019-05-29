@@ -56,4 +56,6 @@ typedef spritestr *sprite;
 BOOL Sprite_IsDefaultPalette( const unsigned int *pPalette,
                               unsigned int nColours );
 
+void Sprite_CreateDefaultPalette( int ncol, unsigned int *pPalette );
+
 #endif
