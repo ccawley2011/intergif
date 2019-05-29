@@ -4,11 +4,6 @@
 
     This is a simple example program which creates a GIF file
 using the InterGif 6 source code as a library.
-    As well as the InterGif source code, you will need a copy of
-DeskLib in order to compile this example. If you're not using
-DeskLib, but are using RiscOSLib (bleurrgh) or OSLib instead,
-you'll need to go and fiddle with Source.c.routils in the
-InterGif source distribution.
     Check out the Makefile: you'll need to tell the C compiler
 where to find "animlib.h" and the linker where to find the "Lib"
 file from the InterGif source distribution.

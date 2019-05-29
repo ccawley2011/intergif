@@ -58,11 +58,11 @@ Sprite_RemoveLeftHandWastage
 
 
 ;----------------------------------------------------------------------
-;       os_error *DrawFile_BBox( int flags, const void *data, int size,
-;                                draw_matrix *dm, wimp_box *result )
+;       os_error *DrawFile__BBox( int flags, const void *data, int size,
+;                                 draw_matrix *dm, draw_box *result )
 
-        EXPORT DrawFile_BBox
-DrawFile_BBox
+        EXPORT DrawFile__BBox
+DrawFile__BBox
         STMFD   R13!,{R4,R14}
         LDR     R4,[R13,#8]         ; arg5 is on the stack
         SWI     XDrawFile_BBox
@@ -71,11 +71,11 @@ DrawFile_BBox
 
 
 ;------------------------------------------------------------------------
-;       os_error *DrawFile_Render( int flags, const void *data, int size,
-;                                  draw_matrix *dm, wimp_box *result )
+;       os_error *DrawFile__Render( int flags, const void *data, int size,
+;                                   draw_matrix *dm, draw_box *result )
 
-        EXPORT DrawFile_Render
-DrawFile_Render
+        EXPORT DrawFile__Render
+DrawFile__Render
         STMFD   R13!,{R4,R14}
         LDR     R4,[R13,#8]         ; arg5 is on the stack
         SWI     XDrawFile_Render
@@ -111,10 +111,10 @@ OSModule_Load
 
 
 ;-------------------------------------------
-;       int TaskWindow_TaskInfo( int which )
+;       int TaskWindow__TaskInfo( int which )
 
-        EXPORT TaskWindow_TaskInfo
-TaskWindow_TaskInfo
+        EXPORT TaskWindow__TaskInfo
+TaskWindow__TaskInfo
         STMFD   R13!,{R14}
         SWI     XTaskWindow_TaskInfo
         MOVVS   R0,#0

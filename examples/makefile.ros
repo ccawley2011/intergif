@@ -8,7 +8,7 @@
 #
 
 Link=gcc
-LinkFlags = -o $@ -mlibscl -mthrowback -LDeskLib: -lDesk-scl
+LinkFlags = -o $@ -mlibscl -mthrowback
 cc = gcc
 CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -DRISCOS -mlibscl -mthrowback -I../src
 

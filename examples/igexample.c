@@ -13,7 +13,8 @@
 #include <string.h>
 
 #ifdef __acorn
-#include "DeskLib:File.h"   /* for File_SetType() */
+#include <kernel.h>
+#include <swis.h>
 #endif
 
 #include "animlib.h"
@@ -159,7 +160,13 @@ int main( int argc, char *argv[] )
 #ifdef __acorn
         /* Set the file's type to "GIF" (this isn't relevant on Win32 or Unix).
          */
-        File_SetType( outputFileName, 0x695 );
+        {
+            _kernel_swi_regs regs;
+            regs.r[0] = 18;
+            regs.r[1] = (int)outputFileName;
+            regs.r[2] = 0x695;
+            _kernel_swi(OS_File, &regs, &regs );
+        }
 #endif
     }
 

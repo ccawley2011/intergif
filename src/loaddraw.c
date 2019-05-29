@@ -41,17 +41,7 @@
 
 #include "animlib.h"
 #include "antialias.h"
-
-/* We're allowed to include these headers, 'cos we only compile under RiscOS
- * anyway
- */
-#include "DeskLib:Sprite.h"
-#include "DeskLib:Str.h"
-#include "DeskLib:GFX.h"
-#include "DeskLib:Wimp.h"
-#include "DeskLib:WimpSWIs.h"
-#include "DeskLib:SWI.h"
-#include "DeskLib:ColourTran.h"
+#include "sprite.h"
 
 #if 0
 #define debugf printf
@@ -69,20 +59,30 @@ typedef struct
     int x2,y2;
 } draw_matrix;
 
+typedef struct
+{
+    int x0,y0;
+    int x1,y1;
+} draw_box;
+
+#ifdef __acorn
+
+#include <kernel.h>
+#include <swis.h>
 
 /*---------------------------------------------------------------------------*
  * System calls in riscos.s                                                  *
  *---------------------------------------------------------------------------*/
 
-os_error *DrawFile_BBox( int flags, const void *pDrawfile, int drawsize,
-                         draw_matrix *pDM, wimp_box *pResult );
-os_error *DrawFile_Render( int flags, const void *pDrawfile, int drawsize,
-                           draw_matrix *pDM, wimp_box *pResult );
+_kernel_oserror *DrawFile__BBox( int flags, const void *pDrawfile, int drawsize,
+                                 draw_matrix *pDM, draw_box *pResult );
+_kernel_oserror *DrawFile__Render( int flags, const void *pDrawfile, int drawsize,
+                                   draw_matrix *pDM, draw_box *pResult );
 
-BOOL      OSModule_Present( char *name );
-os_error *OSModule_Load( char *pathname );
+BOOL             OSModule_Present( char *name );
+_kernel_oserror *OSModule_Load( char *pathname );
 
-int TaskWindow_TaskInfo( int index );
+int TaskWindow__TaskInfo( int index );
 
 
 /*---------------------------------------------------------------------------*
@@ -95,28 +95,28 @@ BOOL Anim_ConvertDraw( const void *data, size_t nSize,
     draw_matrix tm = { 0x10000 * ANIM_AAFACTOR, 0,
                        0, 0x10000 * ANIM_AAFACTOR,
                        0, 0 };
-    wimp_box box;
+    draw_box box;
     int spritex, spritey;
     int i, r,g,b;
-    sprite_outputstate sos;
+    _kernel_swi_regs regs,sos;
     int areasize;
-    sprite_area area = NULL;
-    sprite_header *pSprite;
+    spritearea area = NULL;
+    spritestr *pSprite;
     unsigned int palette[256];
     unsigned int *pPal;
     int w,h;
     int pass, passes, sectiony, basey2;
     anim_imageinfo pixels;
-    os_error *e = NULL;
+    _kernel_oserror *e = NULL;
     BOOL bits24 = TRUE;
-    screen_modeval spritemode;
+    modeval spritemode;
 
     /* check it's a Draw file, if not return NULL */
 
     if ( *(int*)data != 0x77617244 )            /* "Draw" */
         return FALSE;
 
-    if ( TaskWindow_TaskInfo(0) != 0 )
+    if ( TaskWindow__TaskInfo(0) != 0 )
     {
         Anim_SetError( "InterGif cannot process Draw files in a taskwindow. "
                      "Please either press F12 or use the desktop front-end." );
@@ -125,7 +125,6 @@ BOOL Anim_ConvertDraw( const void *data, size_t nSize,
 
     if ( !OSModule_Present( "DrawFile" ) )
     {
-        os_error *e;
         e = OSModule_Load( "System:Modules.Drawfile" );
 
         if ( e )
@@ -135,23 +134,23 @@ BOOL Anim_ConvertDraw( const void *data, size_t nSize,
         }
     }
 
-    if ( DrawFile_BBox( 0, data, nSize, &tm, &box ) )
+    if ( DrawFile__BBox( 0, data, nSize, &tm, &box ) )
     {
         Anim_SetError( "Invalid Draw file\n" );
         return FALSE;
     }
 
-    tm.x2 = 3584-box.min.x;
-    tm.y2 = basey2 = 3584-box.min.y;
-    box.min.x = box.min.x / 256;
-    box.max.x = box.max.x / 256;
-    box.min.y = box.min.y / 256;
-    box.max.y = box.max.y / 256;
+    tm.x2 = 3584-box.x0;
+    tm.y2 = basey2 = 3584-box.y0;
+    box.x0 = box.x0 / 256;
+    box.x1 = box.x1 / 256;
+    box.y0 = box.y0 / 256;
+    box.y1 = box.y1 / 256;
 
-    w = (box.max.x - box.min.x)/2 + 16;
+    w = (box.x1 - box.x0)/2 + 16;
     w = (w + ANIM_AAFACTOR - 1) / ANIM_AAFACTOR;
 
-    h = (box.max.y - box.min.y)/2 + 16;
+    h = (box.y1 - box.y0)/2 + 16;
     h = (h + ANIM_AAFACTOR - 1) / ANIM_AAFACTOR;
 
     if ( animfn && !(*animfn)( handle, w, h, 0 ) )
@@ -161,7 +160,7 @@ BOOL Anim_ConvertDraw( const void *data, size_t nSize,
     }
 
     debugf( "convertdraw: w=%d h=%d box=(%d,%d)..(%d,%d)\n", w, h,
-        box.min.x, box.min.y, box.max.x, box.max.y );
+        box.x0, box.y0, box.x1, box.y1 );
 
 tryagain:
 
@@ -194,13 +193,13 @@ tryagain:
 
         if ( bits24 )
         {
-            areasize = sectiony*spritex*4 + sizeof(sprite_header);
-            areasize += sizeof(sprite_areainfo);
+            areasize = sectiony*spritex*4 + sizeof(spritestr);
+            areasize += sizeof(spriteareastr);
         }
         else
         {
-            areasize = sectiony * ( (spritex+3) & ~3) + sizeof(sprite_header);
-            areasize += 256*8 + sizeof(sprite_areainfo);
+            areasize = sectiony * ( (spritex+3) & ~3) + sizeof(spritestr);
+            areasize += 256*8 + sizeof(spriteareastr);
         }
 
         if ( !sectiony )
@@ -225,25 +224,34 @@ tryagain:
 
     debugf( "fromdraw: Allocate succeeded\n" );
 
-    area->areasize = areasize;
-    area->numsprites = 0;
-    area->firstoffset =
-        area->freeoffset = 16;
+    area->nSize = areasize;
+    area->nSprites = 0;
+    area->nFirstOffset =
+        area->nFreeOffset = 16;
 
     debugf( "Creating big sprite (%dx%d,%d bytes) total size would be %dx%d\n",
             spritex, sectiony, areasize, spritex, spritey );
 
     if (bits24) {
-        spritemode.sprite_mode.istype = 1;
+        spritemode.sprite_mode.isType = TRUE;
         spritemode.sprite_mode.horz_dpi = 90;
         spritemode.sprite_mode.vert_dpi = 90;
         spritemode.sprite_mode.type = 6;
+        spritemode.sprite_mode.isWide = FALSE;
     } else {
         spritemode.screen_mode = 28;
     }
-    e = Sprite_Create( area, "drawfile", FALSE, spritex, sectiony, spritemode);
 
-    /* Sprite_Create will give an error on old (non-24-bit-capable) machines
+    regs.r[0] = 0x10F;
+    regs.r[1] = (int)area;
+    regs.r[2] = (int)"drawfile";
+    regs.r[3] = 0;
+    regs.r[4] = spritex;
+    regs.r[5] = sectiony;
+    regs.r[6] = spritemode.screen_mode;
+    e = _kernel_swi( OS_SpriteOp, &regs, &regs);
+
+    /* OS_SpriteOp 15 will give an error on old (non-24-bit-capable) machines
      * so try again in 8bit
      */
     if ( e && bits24 )
@@ -260,9 +268,9 @@ tryagain:
         debugf( "fromdraw: spritecreate fails, %s\n", e->errmess );
     }
 #endif
-    debugf( "areasize=%d, freeoffset now %d\n", areasize, area->freeoffset );
+    debugf( "areasize=%d, freeoffset now %d\n", areasize, area->nFreeOffset );
 
-    pSprite = (sprite_header*)((char*)area + 16);
+    pSprite = (spritestr*)((char*)area + 16);
 
     if ( !bits24 )
     {
@@ -288,13 +296,14 @@ tryagain:
 
         pSprite->imageoffset += 256*8;
         pSprite->maskoffset  += 256*8;
-        pSprite->offset_next += 256*8;
-        area->freeoffset     += 256*8;
+        pSprite->nNextOffset += 256*8;
+        area->nFreeOffset    += 256*8;
     }
 
-    debugf( "areasize=%d, freeoffset now %d\n", areasize, area->freeoffset );
+    debugf( "areasize=%d, freeoffset now %d\n", areasize, area->nFreeOffset );
 
-    Wimp_CommandWindow(-1);
+    regs.r[0] = -1;
+    _kernel_swi(Wimp_CommandWindow, &regs, &regs);
 
     for ( pass=0; pass<passes; pass++ )
     {
@@ -317,20 +326,23 @@ tryagain:
 
         debugf( "Plotting drawfile\n" );
 
-        e = Sprite_Redirect( area, "drawfile", NULL, &sos );
+        sos.r[0] = 0x13C;
+        sos.r[1] = (int)area;
+        sos.r[2] = (int)"drawfile";
+        sos.r[3] = 0;
+        e = _kernel_swi( OS_SpriteOp, &sos, &sos );
         if ( !e )
         {
-            DrawFile_Render( 0, data, nSize, &tm, NULL );
-            Sprite_UnRedirect( &sos );
+            DrawFile__Render( 0, data, nSize, &tm, NULL );
+            _kernel_swi( OS_SpriteOp, &sos, &sos );
         }
 
 #if DEBUG
-        Sprite_Save( area, "igdebug" );
-        /*{
-            FILE *f = fopen( "igdebug2", "wb" );
-            fwrite( &area->numsprites, 1, area->areasize-4, f );
+        {
+            FILE *f = fopen( "igdebug", "wb" );
+            fwrite( &area->nSprites, 1, area->nSize-4, f );
             fclose(f);
-        } */
+        }
 #endif
 
         if ( e )
@@ -366,7 +378,8 @@ tryagain:
         return FALSE;
     }
 
-    Wimp_CommandWindow(-1);
+    regs.r[0] = -1;
+    _kernel_swi(Wimp_CommandWindow, &regs, &regs);
 
     /* Compress the frame */
 
@@ -378,24 +391,32 @@ tryagain:
 
 #if DEBUG
     {
-        sprite_areainfo sai;
+        spriteareastr sai;
         int imgsize = h*pixels.nLineWidthBytes;
-        sprite_header sh;
+        spritestr sh;
         FILE *f = fopen("igdebug2", "wb");
 
-        sai.numsprites = 1;
-        sai.firstoffset = 16;
-        sai.freeoffset = 16 + sizeof(sprite_header) + imgsize;
+        sai.nSprites = 1;
+        sai.nFirstOffset = 16;
+        sai.nFreeOffset = 16 + sizeof(spritestr) + imgsize;
         fwrite( &sai.numsprites, 1, 12, f );
-        sh.offset_next = sizeof(sprite_header) + imgsize;
+        sh.nNextOffset = sizeof(spritestr) + imgsize;
         strncpy( sh.name, "drawfile2", 12 );
         sh.width = (pixels.nLineWidthBytes/4)-1;
         sh.height = h-1;
         sh.leftbit = 0;
         sh.rightbit = 31;
-        sh.imageoffset = sh.maskoffset = sizeof(sprite_header);
-        sh.screenmode = bits24 ? (6<<27) + (90<<14) + (90<<1) + 1 : 28;
-        fwrite( &sh, 1, sizeof(sprite_header), f );
+        sh.imageoffset = sh.maskoffset = sizeof(spritestr);
+        if (bits24) {
+            spritemode.sprite_mode.isType = TRUE;
+            spritemode.sprite_mode.horz_dpi = 90;
+            spritemode.sprite_mode.vert_dpi = 90;
+            spritemode.sprite_mode.type = 6;
+            spritemode.sprite_mode.isWide = FALSE;
+        } else {
+            spritemode.screen_mode = 28;
+        }
+        fwrite( &sh, 1, sizeof(spritestr), f );
         fwrite( pixels.pBits, 1, imgsize, f );
         fclose( f );
     }
@@ -413,6 +434,7 @@ tryagain:
 
     return TRUE;
 }
+#endif
 
 
 /*---------------------------------------------------------------------------*

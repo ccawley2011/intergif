@@ -62,10 +62,6 @@ o.resources: Templates Menus Sprites
 
 # Dynamic dependencies:
 o.compress:	c.compress
-o.compress:	DeskLib:h.Sprite
-o.compress:	DeskLib:h.Core
-o.compress:	DeskLib:h.Wimp
-o.compress:	DeskLib:h.Coord
 o.compress:	Extras:h.Extras
 o.compress:	h.bitmap
 o.test:	c.test
@@ -106,9 +102,6 @@ o.animlib:	h.gifencode
 o.animlib:	h.animlib
 o.cfsi:	c.cfsi
 o.cfsi:	C:h.kernel
-o.cfsi:	DeskLib:h.Wimp
-o.cfsi:	DeskLib:h.Core
-o.cfsi:	DeskLib:h.WimpSWIs
 o.cfsi:	h.utils
 o.cfsi:	h.animlib
 o.cfsi:	h.animlib
@@ -159,16 +152,7 @@ o.join:	h.animlib
 o.join:	h.cfsi
 o.join:	h.utils
 o.loaddraw:	c.loaddraw
-o.loaddraw:	DeskLib:h.Sprite
-o.loaddraw:	DeskLib:h.Core
-o.loaddraw:	DeskLib:h.Wimp
-o.loaddraw:	DeskLib:h.Coord
-o.loaddraw:	DeskLib:h.Str
-o.loaddraw:	DeskLib:h.GFX
-o.loaddraw:	DeskLib:h.Wimp
-o.loaddraw:	DeskLib:h.WimpSWIs
-o.loaddraw:	DeskLib:h.SWI
-o.loaddraw:	DeskLib:h.ColourTran
+o.loaddraw:	h.sprite
 o.loaddraw:	h.utils
 o.loaddraw:	h.animlib
 o.loaddraw:	h.animlib
@@ -191,7 +175,6 @@ o.loadtca:	h.riemann
 o.loadtca:	h.workspace
 o.main:	c.main
 o.main:	C:h.kernel
-o.main:	DeskLib:h.Core
 o.main:	h.version
 o.main:	h.animlib
 o.main:	h.count
@@ -221,10 +204,6 @@ o.split:	h.utils
 o.split:	h.animlib
 o.utilsro:	c.utilsro
 o.utilsro:	C:h.kernel
-o.utilsro:	DeskLib:h.File
-o.utilsro:	DeskLib:h.Core
-o.utilsro:	DeskLib:h.SWI
-o.utilsro:	DeskLib:h.Hourglass
 o.utilsro:	h.utils
 o.utilsro:	h.animlib
 o.workspace:	c.workspace

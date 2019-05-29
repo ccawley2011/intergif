@@ -19,10 +19,15 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "kernel.h"
 
+#ifdef __acorn
+#include <kernel.h>
+
+#if 0
 #include "DeskLib:Wimp.h"
 #include "DeskLib:WimpSWIs.h"
+#endif
+#endif
 
 #include "utils.h"
 #include "animlib.h"

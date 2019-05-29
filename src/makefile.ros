@@ -28,7 +28,7 @@ WinObjects = window.o resources.o
 all: ../!InterGif/intergif ../!InterGif/!RunImage
 
 ../!InterGif/intergif: $(IGObjects) libanim.a
-	$(Link) $(LinkFlags) $(IGObjects) -L. -lanim -LDeskLib: -lDesk-scl
+	$(Link) $(LinkFlags) $(IGObjects) -L. -lanim
 
 ../!InterGif/!RunImage: $(WinObjects)
 	$(Link) $(LinkFlags) $(WinObjects) -LDeskLib: -lDesk-scl

@@ -15,7 +15,7 @@ CC = cc
 
 Objects = igexample.o
 
-Libraries = ^.src.Lib Extras:Lib DeskLib:o.DeskLib C:o.Stubs
+Libraries = ^.src.Lib Extras:Lib C:o.Stubs
 
 igexample: $(Objects)
 	$(Link) $(LinkFlags) $(Libraries) $(Objects) -o $@

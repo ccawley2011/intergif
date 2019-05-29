@@ -31,10 +31,9 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include "kernel.h"
 
-#include "DeskLib:File.h"
-#include "DeskLib:Hourglass.h"
+#include <kernel.h>
+#include <swis.h>
 
 #include "utils.h"
 
@@ -48,7 +47,19 @@
 
 int Anim_FileSize( const char *filename )
 {
-    return File_Size( (char*)filename );
+    FILE *f = fopen( filename, "rb" );
+    size_t sz;
+
+    if ( !f )
+        return 0;
+
+    fseek( f, 0, SEEK_END );
+
+    sz = (size_t)ftell(f);
+
+    fclose( f );
+
+    return (int) sz;
 }
 
 BOOL Anim_LoadFile( const char *filename, void *data )
@@ -74,13 +85,19 @@ BOOL Anim_LoadFile( const char *filename, void *data )
 
 void Anim_SetFileType( const char *filename, int type )
 {
-    File_SetType( (char*)filename, type );
+    _kernel_swi_regs regs;
+    regs.r[0] = 18;
+    regs.r[1] = (int)filename;
+    regs.r[2] = type;
+    _kernel_swi(OS_File, &regs, &regs );
 }
 
 void Anim_Percent( int percent )
 {
     /* Rather fortunately, this does nothing if the hourglass isn't showing */
-    Hourglass_Percentage( percent );
+    _kernel_swi_regs regs;
+    regs.r[0] = percent;
+    _kernel_swi(Hourglass_Percentage, &regs, &regs );
 }
 
 #if DEBUG
