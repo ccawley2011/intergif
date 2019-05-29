@@ -127,6 +127,9 @@ BOOL Anim_ConvertTCA( const void *data, size_t nSize,
 
     /* Check it's an Animator file, if not return FALSE */
 
+    if ( *(int*)data != chunkid_ACEF )
+        return FALSE;
+
     pACEF = (tca_acef*) TCA_FindChunk( data, nSize, chunkid_ACEF );
     pPALE = (tca_pale*) TCA_FindChunk( data, nSize, chunkid_PALE );
 
