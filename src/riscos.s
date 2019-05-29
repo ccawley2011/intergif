@@ -36,38 +36,12 @@ PC  RN 15
 ;---------------------------
 ;   Declare some SWI numbers
 
-XOS_File                        * &20008
 XOS_Module                      * &2001E
 XOS_SpriteOp                    * &2002E
-XOS_ReadModeVariable            * &20035
-XColourTrans_ReadPalette        * &6075C
 XTaskWindow_TaskInfo            * &63380
 XDrawFile_Render                * &65540
 XDrawFile_BBox                  * &65541
 
-
-;-------------------------------------------------------------------------
-;       os_error *ColourTrans_ReadSpritePalette( area, header, pal, size )
-;
-;        EXPORT ColourTrans_ReadSpritePalette
-;ColourTrans_ReadSpritePalette
-;        STMFD   R13!,{R4,R14}
-;        MOV     R4,#1
-;        SWI     XColourTrans_ReadPalette
-;        MOVVC   R0,#0
-;        LDMFD   R13!,{R4,PC}
-;
-
-;--------------------------------------------------------------------
-;       int OS_ReadModeVariable( int mode, int varno )
-;
-;        EXPORT OS_ReadModeVariable
-;OS_ReadModeVariable
-;        STMFD   R13!,{R14}
-;        SWI     XOS_ReadModeVariable
-;        MOV     R0,R2
-;        LDMFD   R13!,{PC}
-;
 
 ;--------------------------------------------------------------------
 ;       void Sprite_RemoveLeftHandWastage( spritearea pArea, sprite spr )

@@ -75,8 +75,6 @@
 
 #ifdef __acorn
 #include "kernel.h"
-#include "DeskLib:Core.h"
-#include "memflex.h"
 #endif
 
 #include "version.h"

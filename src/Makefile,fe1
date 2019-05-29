@@ -74,13 +74,6 @@ o.test:	h.utils
 o.fromfiles:	c.fromfiles
 o.fromfiles:	h.animlib
 o.fromfiles:	h.utils
-o.memflex:	c.memflex
-o.memflex:	C:h.kernel
-o.memflex:	DeskLib:h.Wimp
-o.memflex:	DeskLib:h.Core
-o.memflex:	DeskLib:h.WimpSWIs
-o.memflex:	h.memflex
-o.memflex:	h.dynamic
 o.window:	c.window
 o.window:	C:h.kernel
 o.window:	DeskLib:h.Wimp
@@ -199,7 +192,6 @@ o.loadtca:	h.workspace
 o.main:	c.main
 o.main:	C:h.kernel
 o.main:	DeskLib:h.Core
-o.main:	h.memflex
 o.main:	h.version
 o.main:	h.animlib
 o.main:	h.count
