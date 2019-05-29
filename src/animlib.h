@@ -209,19 +209,6 @@ void ColourMatch_Destroy( colourmatch *pcm );
 
 /* Other global routines and data */
 
-typedef void* (anim_allocproc)( int nSize );
-typedef void  (anim_freeproc)( void *pBlock );
-
-void Anim_RegisterAllocator( anim_allocproc m, anim_freeproc f );
-
-typedef void (anim_flexallocproc)( void *pPtr, int nSize );
-typedef BOOL (anim_flexreallocproc)( void *pPtr, int nNewSize );
-typedef void (anim_flexfreeproc)( void *pPtr );
-
-void Anim_RegisterFlexAllocator( anim_flexallocproc fa,
-                                 anim_flexreallocproc fr,
-                                 anim_flexfreeproc ff );
-
 extern char *Anim_Error;
 void Anim_ClearError( void );
 

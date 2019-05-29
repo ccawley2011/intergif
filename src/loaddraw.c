@@ -160,9 +160,6 @@ BOOL Anim_ConvertDraw( const void *data, size_t nSize,
         return FALSE;
     }
 
-/*    pixels.pBits = NULL;
-    Anim_FlexAllocate( &pixels.pBits, w*h ); */
-
     debugf( "convertdraw: w=%d h=%d box=(%d,%d)..(%d,%d)\n", w, h,
         box.min.x, box.min.y, box.max.x, box.max.y );
 
@@ -211,7 +208,7 @@ tryagain:
 
         debugf( "fromdraw: Allocating %d bytes\n", areasize );
 
-        Anim_FlexAllocate( &area, areasize );
+        area = Anim_Allocate( areasize );
 
         if ( area )
             break;
@@ -252,7 +249,7 @@ tryagain:
     if ( e && bits24 )
     {
         Anim_Free( &pixels.pBits );
-        Anim_FlexFree( &area );
+        Anim_Free( &area );
         bits24 = FALSE;
         goto tryagain;
     }
@@ -360,7 +357,7 @@ tryagain:
         }
     }
 
-    Anim_FlexFree( &area );
+    Anim_Free( &area );
 
     if ( e )
     {

@@ -32,10 +32,6 @@ void *Anim_Allocate( int nSize );
 void *Anim_Reallocate( void *pBlock, int nSize );
 void  Anim_Free( void *ppBlock );
 
-void  Anim_FlexAllocate( void *pPtr, int nSize );
-BOOL  Anim_FlexReallocate( void *pPtr, int nNewSize );
-void  Anim_FlexFree( void *pPtr );
-
 void  Anim_CheckHeap( char*, int );
 
 
