@@ -12,6 +12,7 @@ viewersrc/resources.s
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
+install_manifest.txt
 
 *.sln
 *.vcxproj

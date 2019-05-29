@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(intergif)
 
+include(GNUInstallDirs)
+
 if(MSVC)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_CRT_NONSTDC_NO_DEPRECATE)
 elseif(WATCOM)
@@ -50,6 +52,7 @@ target_include_directories(anim INTERFACE src)
 
 add_executable(intergif src/main.c)
 target_link_libraries(intergif PRIVATE anim)
+install(TARGETS intergif DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 if(WIN32)
 	add_executable(igviewer WIN32
@@ -58,6 +61,7 @@ if(WIN32)
 		viewersrc/resource.h
 	)
 	target_link_libraries(igviewer PRIVATE anim)
+	install(TARGETS igviewer DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif(WIN32)
 
 add_executable(igexample examples/igexample.c)
