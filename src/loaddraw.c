@@ -428,8 +428,7 @@ tryagain:
 void Anim_AntiAlias( const pixel *srcBits, unsigned int abwSrc,
                      pixel *destBits, unsigned int w, unsigned int h )
 {
-    int x,y,i,j;
-    unsigned int r,g,b,t;
+    unsigned int r,g,b,t,x,y,i,j;
     char byte;
     char bgbyte;
     int abwDest = w; /* Dest is byte-packed, NOT sprite format */
@@ -469,7 +468,7 @@ void Anim_AntiAlias( const pixel *srcBits, unsigned int abwSrc,
                         byte=bgbyte;
                         t++;
                     }
-                    b += ba[byte]; g += ga[byte]; r += ra[byte];
+                    b += ba[(int)byte]; g += ga[(int)byte]; r += ra[(int)byte];
                 }
             if ( t == ANIM_AAFACTOR*ANIM_AAFACTOR )
                 destBits[x] = 255;
@@ -488,8 +487,7 @@ void Anim_AntiAlias( const pixel *srcBits, unsigned int abwSrc,
 void Anim_AntiAlias24( const unsigned int *srcBits, unsigned int wSrc,
                        unsigned int *destBits, unsigned int w, unsigned int h )
 {
-    int x,y,i,j;
-    unsigned int r,g,b,t,word;
+    unsigned int r,g,b,t,x,y,i,j,word;
     char dividebyf2[ANIM_AAFACTOR*ANIM_AAFACTOR*256];
 
     /* Precalculate divisions by ANIM_AAFACTOR^2 */
