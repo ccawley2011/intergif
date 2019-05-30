@@ -71,21 +71,6 @@ typedef struct
 #include <swis.h>
 
 /*---------------------------------------------------------------------------*
- * System calls in riscos.s                                                  *
- *---------------------------------------------------------------------------*/
-
-_kernel_oserror *DrawFile__BBox( int flags, const void *pDrawfile, int drawsize,
-                                 draw_matrix *pDM, draw_box *pResult );
-_kernel_oserror *DrawFile__Render( int flags, const void *pDrawfile, int drawsize,
-                                   draw_matrix *pDM, draw_box *pResult );
-
-BOOL             OSModule_Present( char *name );
-_kernel_oserror *OSModule_Load( char *pathname );
-
-int TaskWindow__TaskInfo( int index );
-
-
-/*---------------------------------------------------------------------------*
  * Constructor                                                               *
  *---------------------------------------------------------------------------*/
 
@@ -98,7 +83,7 @@ BOOL Anim_ConvertDraw( const void *data, size_t nSize,
     draw_box box;
     int spritex, spritey;
     int i, r,g,b;
-    _kernel_swi_regs regs,sos;
+    _kernel_swi_regs regs,sos,draw;
     int areasize;
     spritearea area = NULL;
     spritestr *pSprite;
@@ -116,16 +101,22 @@ BOOL Anim_ConvertDraw( const void *data, size_t nSize,
     if ( *(int*)data != 0x77617244 )            /* "Draw" */
         return FALSE;
 
-    if ( TaskWindow__TaskInfo(0) != 0 )
+    regs.r[0] = 0;
+    _kernel_swi( TaskWindow_TaskInfo, &regs, &regs );
+    if ( regs.r[0] != 0 )
     {
         Anim_SetError( "InterGif cannot process Draw files in a taskwindow. "
                      "Please either press F12 or use the desktop front-end." );
         return FALSE;
     }
 
-    if ( !OSModule_Present( "DrawFile" ) )
+    regs.r[0] = 18;
+    regs.r[1] = (int)"DrawFile";
+    if ( _kernel_swi( OS_Module, &regs, &regs ) )
     {
-        e = OSModule_Load( "System:Modules.Drawfile" );
+        regs.r[0] = 1;
+        regs.r[1] = (int)"System:Modules.Drawfile";
+        e = _kernel_swi( OS_Module, &regs, &regs );
 
         if ( e )
         {
@@ -134,7 +125,12 @@ BOOL Anim_ConvertDraw( const void *data, size_t nSize,
         }
     }
 
-    if ( DrawFile__BBox( 0, data, nSize, &tm, &box ) )
+    draw.r[0] = 0;
+    draw.r[1] = (int)data;
+    draw.r[2] = nSize;
+    draw.r[3] = (int)&tm;
+    draw.r[4] = (int)&box;
+    if ( _kernel_swi( DrawFile_BBox, &draw, &draw ) )
     {
         Anim_SetError( "Invalid Draw file\n" );
         return FALSE;
@@ -333,7 +329,8 @@ tryagain:
         e = _kernel_swi( OS_SpriteOp, &sos, &sos );
         if ( !e )
         {
-            DrawFile__Render( 0, data, nSize, &tm, NULL );
+            draw.r[4] = 0;
+            _kernel_swi( DrawFile_Render, &draw, &draw );
             _kernel_swi( OS_SpriteOp, &sos, &sos );
         }
 

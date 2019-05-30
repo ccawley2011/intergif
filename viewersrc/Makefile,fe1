@@ -14,7 +14,7 @@ LinkFlags = -aif -o $@ -map -xref
 
 Libraries = ^.src.Lib desklib:o.desklib c:o.ministubs
 
-Objects = o.resources o.viewer o.monotonic
+Objects = o.resources o.viewer
 
 ^.!IGViewer.!RunImage: $(Objects) $(Libraries)
     Link $(LinkFlags) $(Objects) $(Libraries) -list o.LinkMap -symbols o.Symbols

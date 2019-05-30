@@ -10,7 +10,7 @@
 Link=gcc
 LinkFlags = -o $@ -mlibscl -mthrowback
 cc = gcc
-CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -DRISCOS -mlibscl -mthrowback -g
+CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -mlibscl -mthrowback -g
 Lib = ar
 LibFlags = cru $@
 ASFlags = -throwback -quit
@@ -20,8 +20,8 @@ ASFlags = -throwback -quit
 LibObjects = animlib.o cfsi.o colmatch.o commonpal.o count.o frame.o from.o \
             fromfile.o gifdecode.o gifencode.o histogram.o intergif.o join.o \
             loaddraw.o loadgif.o loadsprite.o loadtca.o mediancut.o \
-            palettemap.o riemann.o riscos.o savegif.o savesprite.o split.o \
-            utilsro.o workspace.o
+            palettemap.o riemann.o savegif.o savesprite.o split.o utilsro.o \
+            workspace.o
 IGObjects = main.o
 WinObjects = window.o resources.o
 

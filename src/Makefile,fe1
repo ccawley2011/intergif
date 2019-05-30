@@ -8,7 +8,7 @@
 #
 
 .SUFFIXES:   .c .o .s .oo
-CCFlags = -depend !Depend -c -Ospace -throwback -IC: -DRISCOS
+CCFlags = -depend !Depend -c -Ospace -throwback -IC:
 ASFlags = -throwback -quit
 LinkFlags = -aif -o $@ -map -xref
 
@@ -17,8 +17,8 @@ Libraries = desklib:o.desklib c:o.stubs
 IGObjects = animlib.o cfsi.o colmatch.o commonpal.o count.o frame.o from.o \
             fromfile.o gifdecode.o gifencode.o histogram.o intergif.o join.o \
             loaddraw.o loadgif.o loadsprite.o loadtca.o main.o mediancut.o \
-            palettemap.o riemann.o riscos.o savegif.o savesprite.o split.o \
-            utilsro.o workspace.o
+            palettemap.o riemann.o savegif.o savesprite.o split.o utilsro.o \
+            workspace.o
 
 WinObjects = o.resources o.window
 

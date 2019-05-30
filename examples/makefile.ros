@@ -10,7 +10,7 @@
 Link=gcc
 LinkFlags = -o $@ -mlibscl -mthrowback
 cc = gcc
-CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -DRISCOS -mlibscl -mthrowback -I../src
+CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -mlibscl -mthrowback -I../src
 
 .SUFFIXES: .c .o
 

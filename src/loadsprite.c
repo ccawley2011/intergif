@@ -340,7 +340,6 @@ static int Sprite__ModeLog2BPP( modeval mode )
     return mode.sprite_mode.type-1;
 }
 
-#ifndef RISCOS
 /* Remove any left-hand wastage from the sprite. There's a SWI to do
  * this in RiscOS :-) but not elsewhere :-(
  */
@@ -405,6 +404,5 @@ void Sprite_RemoveLeftHandWastage( spritearea a, sprite s )
      * for our purposes it's good enough.
      */
 }
-#endif
 
 /* eof */

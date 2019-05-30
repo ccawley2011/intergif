@@ -10,14 +10,14 @@
 Link=gcc
 LinkFlags = -o $@ -mlibscl -mthrowback -LDeskLib: -lDesk-scl
 cc = gcc
-CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -DRISCOS -mlibscl -mthrowback -I../src
+CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -mlibscl -mthrowback -I../src
 Lib = ar
 LibFlags = cru $@
 ASFlags = -throwback -quit
 
 .SUFFIXES: .c .o
 
-Objects = viewer.o resources.o monotonic.o
+Objects = viewer.o resources.o
 
 all: ../!IGViewer/!RunImage
 
