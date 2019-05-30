@@ -25,7 +25,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include <kernel.h>
-#include <swis.h>
 
 #include "DeskLib:Wimp.h"
 #include "DeskLib:WimpSWIs.h"
@@ -40,6 +39,7 @@
 #include "DeskLib:Sprite.h"
 #include "DeskLib:Hourglass.h"
 #include "DeskLib:Menu.h"
+#include "DeskLib:Time.h"
 
 /* #include "Extras:File.h" */
 #define fdebugf 1?0:fprintf
@@ -102,12 +102,6 @@ extern void Error_Report(int errornum, char *report, ...)
     va_end(ap);
 }
 #endif
-
-static int ReadMonotonicTime(void) {
-    _kernel_swi_regs regs;
-    _kernel_swi( OS_ReadMonotonicTime, &regs, &regs );
-    return regs.r[0];
-}
 
 #define message_OPENURL 0x4AF80
 
@@ -236,8 +230,8 @@ static void View_NextFrame( view v, int nHowPlaying )
     View_Goto( v, n );
     v->nNextFrameTime += v->a->pFrames[n].csDelay;
 
-    if ( v->nNextFrameTime <= ReadMonotonicTime() )
-        v->nNextFrameTime = ReadMonotonicTime()+1;
+    if ( v->nNextFrameTime <= Time_Monotonic() )
+        v->nNextFrameTime = Time_Monotonic()+1;
     fdebugf( stderr, "next: nft=%u\n", v->nNextFrameTime );
 }
 
@@ -251,7 +245,7 @@ static void View_Play( view v, BOOL bForwards )
 
     if ( v->nPlaying != (bForwards ? 1 : -1) )
     {
-        int t = ReadMonotonicTime();
+        int t = Time_Monotonic();
         v->nNextFrameTime = t + v->a->pFrames[v->nFrame].csDelay;
         v->nPlaying = bForwards ? 1 : -1;
         Icon_Select( v->wPlay, bForwards ? playicon_FORWARDS
@@ -610,7 +604,7 @@ int main( int argc, char *argv[] )
         switch (e.type)
         {
         case event_NULL:
-            t = ReadMonotonicTime();
+            t = Time_Monotonic();
             fdebugf( stderr, "null: t=%u\n", t );
             for ( v = playlist; v; v = v->pNextPlaying )
                 if ( ( t - v->nNextFrameTime ) > 0 )
