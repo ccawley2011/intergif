@@ -14,6 +14,9 @@ endif()
 add_library(anim STATIC
 	src/animlib.c
 	src/animlib.h
+	src/antialias.h
+	src/cfsi.c
+	src/cfsi.h
 	src/colmatch.c
 	src/commonpal.c
 	src/count.c
@@ -30,6 +33,7 @@ add_library(anim STATIC
 	src/intergif.c
 	src/intergif.h
 	src/join.c
+	src/loaddraw.c
 	src/loadgif.c
 	src/loadsprite.c
 	src/loadtca.c
@@ -42,9 +46,9 @@ add_library(anim STATIC
 	src/split.c
 	src/sprite.h
 	src/tca.h
+	src/utils.c
 	src/utils.h
 	src/version.h
-	src/win32.c
 	src/workspace.c
 	src/workspace.h
 )

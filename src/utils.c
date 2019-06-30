@@ -32,8 +32,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef __acorn
 #include <kernel.h>
 #include <swis.h>
+#endif
 
 #include "utils.h"
 
@@ -85,22 +87,26 @@ BOOL Anim_LoadFile( const char *filename, void *data )
 
 void Anim_SetFileType( const char *filename, int type )
 {
+#ifdef __acorn
     _kernel_swi_regs regs;
     regs.r[0] = 18;
     regs.r[1] = (int)filename;
     regs.r[2] = type;
     _kernel_swi(OS_File, &regs, &regs );
+#endif
 }
 
 void Anim_Percent( int percent )
 {
+#ifdef __acorn
     /* Rather fortunately, this does nothing if the hourglass isn't showing */
     _kernel_swi_regs regs;
     regs.r[0] = percent;
     _kernel_swi(Hourglass_Percentage, &regs, &regs );
+#endif
 }
 
-#if DEBUG
+#if defined(__acorn) && DEBUG
 /* Exciting allocation checking */
 
 #define MAGICWORD 0x6B637546
@@ -290,13 +296,13 @@ void *Anim_Allocate( int nSize )
     return malloc( nSize );
 }
 
-void Anim_Free( void *pp )
+void Anim_Free( void *ppBlock )
 {
-    void *pBlock = *(void**)pp;
+    void *pBlock = *(void**)ppBlock;
     if ( pBlock )
     {
         free( pBlock );
-        *(void**)pp = NULL;
+        *(void**)ppBlock = NULL;
     }
 }
 
