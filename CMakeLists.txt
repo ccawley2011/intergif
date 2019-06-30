@@ -11,6 +11,16 @@ else()
 	add_compile_options(-O6 --unsigned-char -Wall -Wextra -pedantic -Wno-unused)
 endif()
 
+option(ENABLE_PNG "Build with PNG support" ON)
+if(ENABLE_PNG)
+	find_package(PNG)
+	if(PNG_FOUND)
+		add_definitions(-DENABLE_PNG)
+	else(PNG_FOUND)
+		set(ENABLE_PNG OFF)
+	endif(PNG_FOUND)
+endif(ENABLE_PNG)
+
 add_library(anim STATIC
 	src/animlib.c
 	src/animlib.h
@@ -35,6 +45,7 @@ add_library(anim STATIC
 	src/join.c
 	src/loaddraw.c
 	src/loadgif.c
+	src/loadpng.c
 	src/loadsprite.c
 	src/loadtca.c
 	src/mediancut.c
@@ -53,6 +64,10 @@ add_library(anim STATIC
 	src/workspace.h
 )
 target_include_directories(anim INTERFACE src)
+if(ENABLE_PNG)
+	target_include_directories(anim PRIVATE ${PNG_INCLUDE_DIRS})
+	target_link_libraries(anim PUBLIC ${PNG_LIBRARIES})
+endif(ENABLE_PNG)
 
 add_executable(intergif src/main.c)
 target_link_libraries(intergif PRIVATE anim)

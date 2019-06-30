@@ -654,6 +654,9 @@ int main( int argc, char *argv[] )
                 if ( e.data.message.data.dataload.filetype == 0xFF9
                      || e.data.message.data.dataload.filetype == 0xC2A
                      || e.data.message.data.dataload.filetype == 0x695
+#ifdef ENABLE_PNG
+                     || e.data.message.data.dataload.filetype == 0xB60
+#endif
                      || e.data.message.data.dataload.filetype == 0xAFF )
                 {
                     View_New( e.data.message.data.dataload.filename );

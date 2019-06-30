@@ -87,6 +87,11 @@ BOOL Anim_ConvertData( const void *pData, size_t insize,
     if ( !result && !Anim_Error )
         result = Anim_ConvertTCA( pData, insize, animfn, fn, handle );
 
+#ifdef ENABLE_PNG
+    if ( !result && !Anim_Error )
+        result = Anim_ConvertPNG( pData, insize, animfn, fn, handle );
+#endif
+
     if ( !result && !Anim_Error )
         result = Anim_ConvertSprite( pData, insize, animfn, fn, handle );
 

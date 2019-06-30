@@ -150,6 +150,8 @@ BOOL Anim_ConvertDraw( const void *drawdata, size_t size,
                        anim_animfn animfn, anim_imagefn fn, void *handle );
 BOOL Anim_ConvertGIF( const void *gifdata, size_t size,
                       anim_animfn animfn, anim_imagefn fn, void *handle );
+BOOL Anim_ConvertPNG( const void *pngdata, size_t size,
+                      anim_animfn animfn, anim_imagefn fn, void *handle );
 
 /* Very high-level constructors (calling these will link in *all* the above
  * constructors)

@@ -934,6 +934,9 @@ int main( int argc, char *argv[] )
                 else if ( e.data.message.data.dataload.filetype == 0xFF9
                      || e.data.message.data.dataload.filetype == 0xC2A
                      || e.data.message.data.dataload.filetype == 0x695
+#ifdef ENABLE_PNG
+                     || e.data.message.data.dataload.filetype == 0xB60
+#endif
                      || e.data.message.data.dataload.filetype == 0xAFF
                      || cfsi )
                 {
