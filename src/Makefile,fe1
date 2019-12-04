@@ -16,9 +16,9 @@ Libraries = desklib:o.desklib c:o.stubs
 
 IGObjects = animlib.o cfsi.o colmatch.o commonpal.o count.o frame.o from.o \
             fromfile.o gifdecode.o gifencode.o histogram.o intergif.o join.o \
-            loaddraw.o loadgif.o loadsprite.o loadtca.o main.o mediancut.o \
-            palettemap.o riemann.o savegif.o savesprite.o split.o utils.o \
-            workspace.o
+            loaddraw.o loadgif.o loadjpeg.o loadsprite.o loadtca.o main.o \
+            mediancut.o palettemap.o riemann.o savegif.o savesprite.o split.o \
+            utils.o workspace.o
 
 WinObjects = o.resources o.window
 

@@ -98,6 +98,9 @@ BOOL Anim_ConvertData( const void *pData, size_t insize,
 #ifdef __acorn
     if ( !result && !Anim_Error )
         result = Anim_ConvertDraw( pData, insize, animfn, fn, handle );
+
+    if ( !result && !Anim_Error )
+        result = Anim_ConvertJPEG( pData, insize, animfn, fn, handle );
 #endif
 
     if ( !result && !Anim_Error )

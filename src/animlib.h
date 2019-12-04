@@ -140,7 +140,7 @@ typedef BOOL (*anim_imagefn)( void *handle,
                               const anim_imageinfo *bitmask,
                               const unsigned int *pColours );
 
-/* Higher-level constructors (Draw and Sprite on RiscOS only) */
+/* Higher-level constructors (Draw and JPEG on RiscOS only) */
 
 BOOL Anim_ConvertSprite( const void *spritedata, size_t size,
                          anim_animfn animfn, anim_imagefn fn, void *handle );
@@ -152,6 +152,8 @@ BOOL Anim_ConvertGIF( const void *gifdata, size_t size,
                       anim_animfn animfn, anim_imagefn fn, void *handle );
 BOOL Anim_ConvertPNG( const void *pngdata, size_t size,
                       anim_animfn animfn, anim_imagefn fn, void *handle );
+BOOL Anim_ConvertJPEG( const void *pngdata, size_t size,
+                       anim_animfn animfn, anim_imagefn fn, void *handle );
 
 /* Very high-level constructors (calling these will link in *all* the above
  * constructors)

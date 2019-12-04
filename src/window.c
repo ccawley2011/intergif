@@ -938,6 +938,7 @@ int main( int argc, char *argv[] )
                      || e.data.message.data.dataload.filetype == 0xB60
 #endif
                      || e.data.message.data.dataload.filetype == 0xAFF
+                     || e.data.message.data.dataload.filetype == 0xC85
                      || cfsi )
                 {
                     if ( e.data.message.data.dataload.window < 0 )
