@@ -54,14 +54,6 @@
 
 #include "intergif.h"
 
-#if 0
-#define debugf printf
-#define DEBUG 1
-#else
-#define debugf 1?0:printf
-#define DEBUG 0
-#endif
-
 /*---------------------------------------------------------------------------*
  * Histogrammer is an anim_imagefn passed to Anim_FromFile[s] which adds the *
  * pixels in each frame to the current histogram.                            *

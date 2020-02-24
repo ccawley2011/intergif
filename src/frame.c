@@ -46,14 +46,10 @@
 
 #include "frame.h"
 
-#if 0
-#define debugf printf
-#define DEBUG 1
+#if DEBUG
 #define DBTOT int total = 0
 #define DBINC total++
 #else
-#define debugf 1?0:printf
-#define DEBUG 0
 #define DBTOT
 #define DBINC
 #endif

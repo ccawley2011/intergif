@@ -24,14 +24,6 @@
 #include "animlib.h"
 #include "utils.h"
 
-#if 0
-#define debugf printf
-#define DEBUG 1
-#else
-#define debugf 1?0:printf
-#define DEBUG 0
-#endif
-
 typedef unsigned int (*mapfn)(palettemapper p, unsigned int c);
 typedef pixel (*mapindexfn)(palettemapper p, unsigned int c);
 typedef unsigned int (*getpalfn)(palettemapper p, unsigned int *pal );

@@ -25,14 +25,6 @@
 #include "animlib.h"
 #include "utils.h"
 
-#if 0
-#define debugf printf
-#define DEBUG 1
-#else
-#define debugf 1?0:printf
-#define DEBUG 0
-#endif
-
 /* Convert %0bbbbbgggggrrrrr to &BBGGRR00 */
 unsigned int Anim_Pix16to32(unsigned int x)
 {

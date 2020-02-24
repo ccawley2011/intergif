@@ -80,15 +80,8 @@
 #include "version.h"
 #include "animlib.h"
 #include "count.h"
+#include "utils.h"
 #include "intergif.h"
-
-#if 0
-#define debugf printf
-#define DEBUG 1
-#else
-#define debugf 1?0:printf
-#define DEBUG 0
-#endif
 
 #ifdef __acorn
 static const char ERROR_VAR[] = "InterGif$Error";

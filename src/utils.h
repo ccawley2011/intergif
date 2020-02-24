@@ -17,6 +17,10 @@
 #define FALSE 0
 #endif
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 /* File handling (utils.c) */
 
 int  Anim_FileSize( const char *filename );
@@ -54,5 +58,12 @@ void Anim_NthName( const char *in, char *out, int n );
 /* Let the user know something's happening */
 
 void Anim_Percent( int percent );
+
+void Anim_Debug( const char *file, const char *func, int line, const char *format, ...);
+#if DEBUG
+#define debugf(...) Anim_Debug(__FILE__, __func__, __LINE__, __VA_ARGS__)
+#else
+#define debugf(...) do { } while (0)
+#endif
 
 #endif

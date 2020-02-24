@@ -43,14 +43,6 @@
 #include "antialias.h"
 #include "sprite.h"
 
-#if 0
-#define debugf printf
-#define DEBUG 1
-#else
-#define debugf 1?0:printf
-#define DEBUG 0
-#endif
-
 
 typedef struct
 {

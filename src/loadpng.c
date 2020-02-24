@@ -19,14 +19,6 @@
 
 #include <png.h>
 
-#if 0
-#define debugf printf
-#define DEBUG 1
-#else
-#define debugf 1?0:printf
-#define DEBUG 0
-#endif
-
 
 #define PNG_HAS_PALETTE(colour_type) (colour_type & PNG_COLOR_MASK_PALETTE)
 #define PNG_IS_INDEXED(colour_type) \

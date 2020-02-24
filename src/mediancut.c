@@ -32,12 +32,6 @@
 #include "animlib.h"
 #include "utils.h"
 
-#if 0
-#define debugf printf
-#else
-#define debugf 1?0:printf
-#endif
-
 #define C0_SCALE 2		/* scale R distances by this much */
 #define C1_SCALE 3		/* scale G distances by this much */
 #define C2_SCALE 1		/* and B by this much */

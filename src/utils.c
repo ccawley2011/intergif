@@ -29,6 +29,7 @@
  *
  */
 
+#include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -38,14 +39,6 @@
 #endif
 
 #include "utils.h"
-
-#if 0
-#define debugf printf
-#define DEBUG 1
-#else
-#define debugf 1?0:printf
-#define DEBUG 0
-#endif
 
 int Anim_FileSize( const char *filename )
 {
@@ -104,6 +97,17 @@ void Anim_Percent( int percent )
     regs.r[0] = percent;
     _kernel_swi(Hourglass_Percentage, &regs, &regs );
 #endif
+}
+
+void Anim_Debug( const char *file, const char *func, int line, const char *format, ...)
+{
+    va_list args;
+#if 0
+    fprintf(stderr, "%s (%s:%d): ", func, file, line);
+#endif
+    va_start(args, format);
+    vfprintf(stderr, format, args);
+    va_end(args);
 }
 
 #if defined(__acorn) && DEBUG

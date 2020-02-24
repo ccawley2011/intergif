@@ -32,14 +32,6 @@
 #include "workspace.h"
 #include "utils.h"
 
-#if 0
-#define debugf printf
-#define DEBUG 1
-#else
-#define debugf 1?0:printf
-#define DEBUG 0
-#endif
-
 #define BITS 12
 #define MAXCODE(__bits) ( (1<<(__bits)) -1 )
 
