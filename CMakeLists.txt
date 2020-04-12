@@ -49,6 +49,7 @@ add_library(anim STATIC
 	src/loadsprite.c
 	src/loadtca.c
 	src/mediancut.c
+	src/modes.c
 	src/palettemap.c
 	src/riemann.c
 	src/riemann.h

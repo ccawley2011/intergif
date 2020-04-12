@@ -271,63 +271,10 @@ static int Sprite__GetDelay( const sprite spr )
     return i ? i : 8;
 }
 
-static const char spritebpp[] = {
-    0,  /* MODE 0 1bpp */
-    1,	/* MODE 1 2bpp */
-    2,	/* MODE 2 4bpp */
-    0,	/* MODE 3? */
-    0,	/* MODE 4 1bpp */
-    1,	/* MODE 5 2bpp */
-    0,	/* MODE 6? */
-    0,	/* MODE 7? */
-    1,
-    2,	/* MODE 9 4bpp */
-    3,	/* MODE 10 8bpp */
-    1,
-    2,	/* MODE 12 4bpp */
-    3,	/* MODE 13 8bpp */
-    2,
-    3,	/* MODE 15 8bpp */
-    2,
-    2,
-    0,	/* MODE 18 1bpp */
-    1,	/* MODE 19 2bpp */
-    2,	/* MODE 20 4bpp */
-    3,	/* MODE 21 8bpp */
-    2,
-    0,	/* MODE 23 1bpp */
-    3,	/* MODE 24 8bpp */
-    0,
-    1,
-    2,
-    3,	/* MODE 28 8bpp */
-    0,
-    1,	/* MODE 30 2bpp */
-    2,
-    3,
-    0,
-    1,
-    2,
-    3,	/* MODE 36 8bpp */
-    0,
-    1,
-    2,
-    3,	/* MODE 40 8bpp */
-    0,
-    1,
-    2,	/* MODE 43 4bpp */
-    0,
-    1,
-    2,	/* MODE 46 4bpp */
-    3,	/* MODE 47 8bpp */
-    2,	/* MODE 48 4bpp */
-    3	/* MODE 49 8bpp */
-};
-
 static int Sprite__ModeLog2BPP( modeval mode )
 {
     if ( mode.sprite_mode.type == 0 )
-        return mode.screen_mode < 50 ? (int)(spritebpp[mode.screen_mode]) : 4;
+        return mode.screen_mode < 50 ? (int)(riscos_modes[mode.screen_mode].Log2BPP) : 4;
 
     return mode.sprite_mode.type-1;
 }

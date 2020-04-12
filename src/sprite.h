@@ -13,6 +13,10 @@
 #ifndef animlib_sprite_h
 #define animlib_sprite_h
 
+#ifndef animlib_h
+#include "animlib.h"
+#endif
+
 typedef struct
 {
 	BOOL isType  : 1;
@@ -51,6 +55,24 @@ typedef struct
 } spritestr;
 
 typedef spritestr *sprite;
+
+typedef struct {
+  char  ModeFlags;
+  char  ScrRCol;
+  char  ScrBRow;
+  char  NColour;
+  char  XEigFactor;
+  char  YEigFactor;
+  short LineLength;
+  int   ScreenSize;
+  char  YShftFactor;
+  char  Log2BPP;
+  char  Log2BPC;
+  short XWindLimit;
+  short YWindLimit;
+} mode_variables;
+
+extern const mode_variables riscos_modes[50];
 
 /* Is this a default RiscOS palette? (loadsprite.c) */
 BOOL Sprite_IsDefaultPalette( const unsigned int *pPalette,
