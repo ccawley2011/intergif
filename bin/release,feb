@@ -4,9 +4,8 @@
 
 | 1. Binary archive
 
-create ig
-delete ig
-SparkFSCreate 1 ig
+x wipe ig ~cfr~v
+cdir ig
 
 set alias$doit copy %%0 ig.%%0 a~c~df~l~n~p~q~r~s~t~v
 doit Copying
@@ -30,12 +29,18 @@ doit !IGViewer.Copying
 doit !IGViewer.Sprites
 doit !IGViewer.Templates
 
+dir ig
+zip -9r ^.ig/zip *
+back
+
+wipe ig ~cfr~v
+
+
 
 | 2. Source archive
 
-create igsrc
-delete igsrc
-SparkFSCreate 1 igsrc
+x wipe igsrc ~cfr~v
+cdir igsrc
 
 set alias$doit copy %%0 igsrc.%%0 a~c~df~l~n~p~q~r~s~t~v
 doit Copying
@@ -55,12 +60,15 @@ doit !IGViewer.!Sprites
 doit !IGViewer.Copying
 doit !IGViewer.Sprites
 doit !IGViewer.Templates
+doit !Mk
+doit !MkClean
 cdir igsrc.bin
-doit bin.findtypes
+tokenize bin.ListModes -out igsrc.bin.ListModes
 doit bin.release
 doit bin.rescompile
-doit bin.types
+doit CMakeLists/txt
 doit Makefile
+doit README
 cdir igsrc.src
 doit src.betatest
 doit src.c
@@ -86,5 +94,12 @@ doit examples.c
 doit examples.Makefile
 doit examples.makefile/ros
 doit examples.Readme
-cdir examples.o
+cdir igsrc.examples.o
+
+dir igsrc
+zip -9r ^.igsrc/zip *
+back
+
+wipe igsrc ~cfr~v
+
 echo Done!
