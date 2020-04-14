@@ -32,5 +32,5 @@ all: ../!IGViewer/!RunImage
 	@echo Assembling $<
 	@asasm $(ASflags) -to $@ -from $<
 
-resources.s: Templates Menus Sprites
-	^.bin.ResCompile -t Templates -m Menus -s Sprites -o s.resources
+resources.s: Menus
+	^.bin.ResCompile -m Menus -o s.resources

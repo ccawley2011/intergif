@@ -76,10 +76,10 @@ typedef struct viewstr {
 static viewstr *views = NULL;
 static viewstr *playlist = NULL;
 
-extern window_block Template_film;
-extern window_block Template_play;
-extern window_block Template_info;
-extern sprite_areainfo Sprite_Area;
+static window_block *Template_film;
+static window_block *Template_play;
+static window_block *Template_info;
+static sprite_areainfo *Sprite_Area;
 extern menu_block Menu_iconbar;
 
 static wimp_point playtools; /* Size of playtools window */
@@ -394,7 +394,7 @@ static sprite_areainfo *CreateBufferSprite( anim a, int *bgc )
 static void View_New( const char *name )
 {
     view theView = malloc( sizeof(viewstr) );
-    icon_block *pib = (icon_block*)((&Template_film)+1);
+    icon_block *pib = (icon_block*)(Template_film+1);
     window_state ws;
     int x,y;
     const char *leafname;
@@ -453,24 +453,24 @@ static void View_New( const char *name )
     pib->workarearect.max.x = x;
     pib->workarearect.min.y = y;
 
-    Template_film.screenrect.max.x = Template_film.screenrect.min.x + x;
-    Template_film.screenrect.min.y = Template_film.screenrect.max.y + y;
-    Template_film.minsize.x = x;
-    Template_film.minsize.y = -y;
-    Template_film.workarearect = pib->workarearect;
-    Template_film.spritearea = theView->buffer;
-    Template_film.title.indirecttext.buffer = theView->leafname;
+    Template_film->screenrect.max.x = Template_film->screenrect.min.x + x;
+    Template_film->screenrect.min.y = Template_film->screenrect.max.y + y;
+    Template_film->minsize.x = x;
+    Template_film->minsize.y = -y;
+    Template_film->workarearect = pib->workarearect;
+    Template_film->spritearea = theView->buffer;
+    Template_film->title.indirecttext.buffer = theView->leafname;
 
-    Wimp_CreateWindow( &Template_film, &theView->wFilm );
+    Wimp_CreateWindow( Template_film, &theView->wFilm );
 
     if ( theView->a->nFrames > 1 )
     {
-        playtools.x = Template_play.screenrect.max.x
-                         - Template_play.screenrect.min.x;
-        playtools.y = Template_play.screenrect.max.y
-                         - Template_play.screenrect.min.y;
-        Template_play.spritearea = &Sprite_Area;
-        Wimp_CreateWindow( &Template_play, &theView->wPlay );
+        playtools.x = Template_play->screenrect.max.x
+                         - Template_play->screenrect.min.x;
+        playtools.y = Template_play->screenrect.max.y
+                         - Template_play->screenrect.min.y;
+        Template_play->spritearea = Sprite_Area;
+        Wimp_CreateWindow( Template_play, &theView->wPlay );
     }
     else
         theView->wPlay = 0;
@@ -561,9 +561,17 @@ static void wimpinit( void )
     Wimp_Initialise( &version, "InterGif Viewer", &me, &messages );
     Screen_CacheModeInfo();
 
+    Sprite_Area = Sprite_LoadFile("<InterGif$Viewer$Dir>.Sprites");
+
+    Template_LoadFile("<InterGif$Viewer$Dir>.Templates");
+
+    Template_film = Template_Find("film");
+    Template_play = Template_Find("play");
+    Template_info = Template_Find("info");
+
     iBarIcon = Icon_BarIcon( "!IGViewer", -1 );
 
-    Wimp_CreateWindow( &Template_info, &wInfo );
+    Wimp_CreateWindow( Template_info, &wInfo );
     pmi->submenu.window = wInfo;
 }
 
@@ -677,7 +685,9 @@ int main( int argc, char *argv[] )
             break;
         }
     }
+    Template_ClearAll();
     Wimp_CloseDown(me);
+    free(Sprite_Area);
     return 0;
 }
 

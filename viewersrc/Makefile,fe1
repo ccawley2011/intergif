@@ -23,8 +23,8 @@ Objects = o.resources o.viewer
 enla: $(Objects)
     enla $(Objects)
 
-o.resources: Templates Menus Sprites
-    ResCompile -t Templates -m Menus -s Sprites -o s.resources
+o.resources: Menus
+    ResCompile -m Menus -o s.resources
     objasm $(ASflags) -to o.resources -from s.resources
     delete s.resources
 

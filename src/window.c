@@ -87,12 +87,12 @@ static BOOL cfsi = FALSE;
 static BOOL draggingfile = FALSE;
 static BOOL iconbar = FALSE;
 
-extern window_block Template_intergif;
-extern window_block Template_quantise;
-extern window_block Template_spropt;
-extern window_block Template_info;
-extern window_block Template_cfsi;
-extern sprite_areainfo Sprite_Area;
+static window_block *Template_intergif;
+static window_block *Template_quantise;
+static window_block *Template_spropt;
+static window_block *Template_info;
+static window_block *Template_cfsi;
+static sprite_areainfo *Sprite_Area;
 extern menu_block Menu_iconbar;
 
 
@@ -281,7 +281,7 @@ static void LoadFile( const char *name, int type )
 
 static void SaveFile( char *filename )
 {
-    icon_block *pib = (icon_block*)((&Template_intergif)+1);
+    icon_block *pib = (icon_block*)(Template_intergif+1);
     char buffer[700];   /* two filenames and then some */
     os_error *e;
     int next, oldnext, free, current;
@@ -544,7 +544,7 @@ static void OpenPaletteWindow( void )
         sprintf( palette_colouricon, "%d", palette_opt_colours );
     }
 
-    OpenTransient( palh, &Template_quantise );
+    OpenTransient( palh, Template_quantise );
 
     palette_open = TRUE;
 }
@@ -556,7 +556,7 @@ static void OpenSprOptWindow( void )
         SetupSprOpt();
     }
 
-    OpenTransient( spropth, &Template_spropt );
+    OpenTransient( spropth, Template_spropt );
 
     palette_open = TRUE;
 }
@@ -588,7 +588,7 @@ static void OpenCFSIWindow( void )
         }
     }
 
-    OpenTransient( wCFSI, &Template_cfsi );
+    OpenTransient( wCFSI, Template_cfsi );
 
     cfsi_open = TRUE;
 }
@@ -598,8 +598,8 @@ static void OpenMainWindow( void )
     window_openblock wob;
 
     wob.window = wh;
-    wob.screenrect = Template_intergif.screenrect;
-    wob.scroll = Template_intergif.scroll;
+    wob.screenrect = Template_intergif->screenrect;
+    wob.scroll = Template_intergif->scroll;
     wob.behind = (window_handle)-1;     /* in front */
     Wimp_OpenWindow( &wob );
 }
@@ -757,7 +757,7 @@ static void WimpButton( void )
     {
         if ( e.data.mouse.icon == igicon_DRAGGABLE && *loadname )
         {
-            icon_block *pib = (icon_block*) ((&Template_intergif)+1);
+            icon_block *pib = (icon_block*) (Template_intergif+1);
             window_state ws;
 
             Wimp_GetWindowState( wh, &ws );
@@ -784,13 +784,23 @@ static void wimpinit( void )
     Wimp_Initialise( &version, "InterGif", &me, &messages );
     Screen_CacheModeInfo();
 
-    pib = (icon_block*) ((&Template_intergif)+1);
+    Sprite_Area = Sprite_LoadFile("<InterGif$Dir>.Sprites");
+
+    Template_LoadFile("<InterGif$Dir>.Templates");
+
+    Template_intergif = Template_Find("intergif");
+    Template_quantise = Template_Find("quantise");
+    Template_spropt = Template_Find("spropt");
+    Template_info = Template_Find("info");
+    Template_cfsi = Template_Find("cfsi");
+
+    pib = (icon_block*) (Template_intergif+1);
     pib[igicon_SAVENAME].data.indirecttext.buffer = savename;
     strcpy( pib[igicon_DELAY].data.indirecttext.buffer, "8" );
     strcpy( pib[igicon_TRANS_VALUE].data.indirecttext.buffer, "0" );
     saveicon = pib[igicon_DRAGGABLE].data.indirecttext.validstring;
-    Template_intergif.spritearea = &Sprite_Area;
-    Wimp_CreateWindow( &Template_intergif, &wh );
+    Template_intergif->spritearea = Sprite_Area;
+    Wimp_CreateWindow( Template_intergif, &wh );
     Icon_Shade( wh, igicon_DRAGGABLE );
     Icon_Shade( wh, igicon_SAVENAME );
     Icon_Shade( wh, igicon_SAVE );
@@ -801,31 +811,31 @@ static void wimpinit( void )
     Icon_Select( wh, igicon_TRANS_USE );
     Icon_Shade( wh, igicon_SPROPTIONS );
 
-    pib = (icon_block*) ((&Template_quantise)+1);
-    Template_quantise.spritearea = &Sprite_Area;
+    pib = (icon_block*) (Template_quantise+1);
+    Template_quantise->spritearea = Sprite_Area;
     palette_colouricon = pib[palicon_OPT_COLOURS].data.indirecttext.buffer;
-    Wimp_CreateWindow( &Template_quantise, &palh );
+    Wimp_CreateWindow( Template_quantise, &palh );
     Icon_Shade( palh, palicon_OPT_COLOURS );
     Icon_Shade( palh, palicon_DITHER );
     Icon_Shade( palh, palicon_LOADICON );
     Icon_Shade( palh, palicon_DROPZONE );
     Icon_Select( palh, palicon_KEEP );
 
-    pib = (icon_block*) ((&Template_spropt)+1);
-    Template_spropt.spritearea = &Sprite_Area;
-    Wimp_CreateWindow( &Template_spropt, &spropth );
+    pib = (icon_block*) (Template_spropt+1);
+    Template_spropt->spritearea = Sprite_Area;
+    Wimp_CreateWindow( Template_spropt, &spropth );
 
-    pib = (icon_block*) ((&Template_cfsi)+1);
-    Template_cfsi.spritearea = &Sprite_Area;
+    pib = (icon_block*) (Template_cfsi+1);
+    Template_cfsi->spritearea = Sprite_Area;
     cfsi_optionicon = pib[cfsiicon_OPTIONS].data.indirecttext.buffer;
-    Wimp_CreateWindow( &Template_cfsi, &wCFSI );
+    Wimp_CreateWindow( Template_cfsi, &wCFSI );
 
     OpenMainWindow();
 
     if ( iconbar )
     {
         Icon_BarIcon( "!InterGif", -1 );
-        Wimp_CreateWindow( &Template_info, &wInfo );
+        Wimp_CreateWindow( Template_info, &wInfo );
         pmi->submenu.window = wInfo;
     }
 }
@@ -961,7 +971,9 @@ int main( int argc, char *argv[] )
             break;
         }
     }
+    Template_ClearAll();
     Wimp_CloseDown(me);
+    free(Sprite_Area);
     return 0;
 }
 
