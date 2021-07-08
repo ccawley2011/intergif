@@ -13,11 +13,10 @@ cc = gcc
 CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -mlibscl -mthrowback -I../src
 Lib = ar
 LibFlags = cru $@
-ASFlags = -throwback -quit
 
 .SUFFIXES: .c .o
 
-Objects = viewer.o resources.o
+Objects = viewer.o
 
 all: ../!IGViewer/!RunImage
 
@@ -27,10 +26,3 @@ all: ../!IGViewer/!RunImage
 .c.o:
 	@echo Compiling $<
 	@$(cc) $(CCflags) -o $@ $<
-
-.s.o:
-	@echo Assembling $<
-	@asasm $(ASflags) -to $@ -from $<
-
-resources.s: Menus
-	^.bin.ResCompile -m Menus -o s.resources

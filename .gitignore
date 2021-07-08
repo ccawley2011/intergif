@@ -6,8 +6,6 @@ CVS
 *.a
 *.exe
 *,ff8
-src/resources.s
-viewersrc/resources.s
 
 CMakeCache.txt
 CMakeFiles/

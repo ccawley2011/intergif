@@ -80,7 +80,21 @@ static window_block *Template_film;
 static window_block *Template_play;
 static window_block *Template_info;
 static sprite_areainfo *Sprite_Area;
-extern menu_block Menu_iconbar;
+
+typedef struct menustr {
+    menu_block block;
+    menu_item items[];
+} menustr;
+
+static menustr Menu_iconbar = {
+    { "IGViewer", 7, 2, 7, 0, 176, 44, 0 },
+    {
+        { {0},   {(menu_ptr)-1}, {117440513}, {"Info"}        },
+        { {0},   {(menu_ptr)-1}, {117440513}, {"Web site..."} },
+        { {2},   {(menu_ptr)-1}, {117440513}, {"Help..."}     },
+        { {128}, {(menu_ptr)-1}, {117440513}, {"Quit"}        }
+    }
+};
 
 static wimp_point playtools; /* Size of playtools window */
 
@@ -515,7 +529,7 @@ static void WimpButton( void )
 {
     if ( e.data.mouse.button.data.menu && e.data.mouse.window < 0 )
     {
-        Menu_Show( &Menu_iconbar, e.data.mouse.pos.x, -1 );
+        Menu_Show( &Menu_iconbar.block, e.data.mouse.pos.x, -1 );
     }
     else
     {
@@ -556,7 +570,7 @@ static void wimpinit( void )
 {
     unsigned int version = 310;
     static int messages = 0;
-    menu_item *pmi = (menu_item*)((&Menu_iconbar)+1);
+    menu_item *pmi = &Menu_iconbar.items;
 
     Wimp_Initialise( &version, "InterGif Viewer", &me, &messages );
     Screen_CacheModeInfo();

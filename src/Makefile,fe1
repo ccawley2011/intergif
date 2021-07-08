@@ -7,9 +7,8 @@
 #      Peter Hartley       <pdh@chaos.org.uk>
 #
 
-.SUFFIXES:   .c .o .s .oo
+.SUFFIXES:   .c .o .oo
 CCFlags = -depend !Depend -c -Ospace -throwback -IC:
-ASFlags = -throwback -quit
 LinkFlags = -aif -o $@ -map -xref
 
 Libraries = desklib:o.desklib c:o.stubs
@@ -20,7 +19,7 @@ IGObjects = animlib.o cfsi.o colmatch.o commonpal.o count.o frame.o from.o \
             mediancut.o modes.o palettemap.o riemann.o savegif.o savesprite.o \
             split.o utils.o workspace.o
 
-WinObjects = o.resources o.window
+WinObjects = o.window
 
 all: ^.!InterGif.intergif ^.!InterGif.!RunImage Lib
     @Echo
@@ -49,16 +48,9 @@ enla: $(IGObjects)
             o.utilsro o.workspace
 
 
-o.resources: Menus
-    ResCompile -m Menus -o s.resources
-    objasm $(ASflags) -to o.resources -from s.resources
-    delete s.resources
-
 .c.o:;	cc $(CCflags) -o $@ $<
 
 .c.oo:;	cc $(CCflags) -o $@ $< -DNO_WINDOWS=1
-
-.s.o:;	objasm $(ASflags) -to $@ -from $<
 
 # Dynamic dependencies:
 o.compress:	c.compress

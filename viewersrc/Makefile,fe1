@@ -7,14 +7,13 @@
 #      Peter Hartley       <pdh@utter.chaos.org.uk>
 #
 
-.SUFFIXES:   .c .o .s .oo
+.SUFFIXES:   .c .o .oo
 CCFlags = -depend !Depend -c -ffa -Ospace -throwback -IC:
-ASFlags = -throwback -quit
 LinkFlags = -aif -o $@ -map -xref
 
 Libraries = ^.src.Lib desklib:o.desklib c:o.ministubs
 
-Objects = o.resources o.viewer
+Objects = o.viewer
 
 ^.!IGViewer.!RunImage: $(Objects) $(Libraries)
     Link $(LinkFlags) $(Objects) $(Libraries) -list o.LinkMap -symbols o.Symbols
@@ -23,16 +22,9 @@ Objects = o.resources o.viewer
 enla: $(Objects)
     enla $(Objects)
 
-o.resources: Menus
-    ResCompile -m Menus -o s.resources
-    objasm $(ASflags) -to o.resources -from s.resources
-    delete s.resources
-
 .c.o:;	cc $(CCflags) -o $@ $<
 
 .c.oo:;	cc $(CCflags) -o $@ $< -DNO_WINDOWS=1
-
-.s.o:;	objasm $(ASflags) -to $@ -from $<
 
 # Dynamic dependencies:
 o.viewer:	c.viewer

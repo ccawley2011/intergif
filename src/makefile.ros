@@ -13,7 +13,6 @@ cc = gcc
 CCflags = -O6 --unsigned-char -c -Wall -Wno-unused -D__acorn -mlibscl -mthrowback -g
 Lib = ar
 LibFlags = cru $@
-ASFlags = -throwback -quit
 
 .SUFFIXES: .c .o
 
@@ -23,7 +22,7 @@ LibObjects = animlib.o cfsi.o colmatch.o commonpal.o count.o frame.o from.o \
             modes.o palettemap.o riemann.o savegif.o savesprite.o split.o \
             utils.o workspace.o
 IGObjects = main.o
-WinObjects = window.o resources.o
+WinObjects = window.o
 
 all: ../!InterGif/intergif ../!InterGif/!RunImage
 
@@ -39,10 +38,3 @@ libanim.a: $(LibObjects)
 .c.o:
 	@echo Compiling $<
 	@$(cc) $(CCflags) -o $@ $<
-
-.s.o:
-	@echo Assembling $<
-	@asasm $(ASflags) -to $@ -from $<
-
-resources.s: Menus
-	^.bin.ResCompile -m Menus -o s.resources
